@@ -1,9 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include "../../funcoes.h"
 
 int somarNumeros( int n, int limite, int soma);
 
-float leReal();
 
 int main(){
     
@@ -26,22 +26,13 @@ int main(){
 int somarNumeros(int limiteInferior, int limiteSuperior, int soma){
 
     soma += limiteInferior;
-
-    if( (limiteInferior < limiteSuperior) ){
-
+    
+    if( (limiteInferior < limiteSuperior) ){    
+        
         soma = somarNumeros( limiteInferior + 1, limiteSuperior, soma);
 
     }
 
 
     return soma;
-}
-
-float leReal(){
-
-    float real;
-    scanf("%f", &real);
-    
-    return real;
-
 }

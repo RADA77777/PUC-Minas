@@ -1,49 +1,42 @@
-#include <stdio.h>
-#include <stdlib.h>
+#include<stdlib.h>
+#include<stdio.h>
 
-int fibonacci( int posicao_atual, int posicao_limite, int anterior, int atual);
-
-float leReal();
-
-int main(){
-    
-    printf("Digite quantos termos da sequencia de fibonacci voce deseja ver:\n");
-    
-    int limiteSuperior = leReal();
-
-    printf("Gerando a sequencia...\n\n");
-
-    fibonacci(0, limiteSuperior, 0, 1);
+int _fibonacci(int n,int termo1,int termo2);
+int _lertermo();
 
 
-    return 0;
-
+int main()
+{
+        int fibonacci,
+            termo;
+        termo=_lertermo();
+        fibonacci=_fibonacci(termo,1,0);
+        printf("\n%d\t",fibonacci);
+        return 0;
 }
 
 
-int fibonacci(int posicao_atual, int posicao_limite, int anterior, int atual){
+int _fibonacci(int n,int termo1,int termo2){
+        int aux=0;//variavel auxiliar
 
+        if(n >= 1){
 
-    if(posicao_atual < posicao_limite){
+                aux=termo1+termo2;
+                termo2=termo1;
+                termo1=aux;
 
+                printf("%d\n", termo1);
+                _fibonacci( (n - 1), termo1, termo2 );
+                
+        }
 
-        posicao_atual += 1;
-
-        printf("%d,  ", anterior);
-
-        fibonacci(posicao_atual, posicao_limite, atual, (atual + anterior) );
-
-    }
-
-
-    return atual;
+        return aux;
 }
 
-float leReal(){
-
-    float real;
-    scanf("%f", &real);
-    
-    return real;
-
+int _lertermo()
+{
+        int termo;
+        printf("\nDigite qual o termo que deseja ser mostrado: ");
+        scanf("%d",&termo);
+        return termo;
 }
