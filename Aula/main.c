@@ -5,25 +5,46 @@
 
 
 
-int troca (int *a, int *b){
+int funcao (){
 
-    int aux;
+    int grau, resultado = 0, resposta = 0;
+    printf("Digite o grau da funcao:\n");
 
-    aux = *a;
-    *a = *b;
-    *b = aux;
+    scanf("%d", &grau);
+
+    int numeros[grau];
     
 
-    return 0;
+    for(int expoente = grau; expoente >= 0; expoente--)
+    {
+
+        printf("Digite o %d valor:\n", expoente + 1);
+        scanf("%d", &numeros[expoente]);
+
+
+        if(numeros[expoente] < 0)
+        {
+    
+        resultado = pow(numeros[expoente], expoente) + resultado;
+        printf("%d\n\n", resultado);
+    
+        }
+
+        else
+        {
+
+        resultado = pow(numeros[expoente], expoente) - resultado;
+
+        }
+    }
+    
+
+    return resultado;
 }
 
 int main(){
 
-    int a = 1, b = 2;
-
-    troca(&a, &b);
-
-    printf("%d %d\n\n\n", a, b);
+    printf("%d", funcao());
 
     return 0;
 }
