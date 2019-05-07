@@ -33,4 +33,3 @@ int main()
     fclose(exemplo);
 
     return 0;
-}
