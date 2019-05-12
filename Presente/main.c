@@ -7,14 +7,16 @@ int main() {
 int j, k;
 
 
+
+printf("\t\tFELIZ DIA DAS MÃES, MÃE!\n\n\n");
+
 //Parte de Cima do Coração
-printf("\tFELIZ DIA DAS MÃES, MÃE!\n");
 
 for(int i = 20; i >= 0; i-=6)
 {
+  printf("\t");
   for (k = 0; k < (i-6)/2 ; k++)
   {
-
     printf(" ");
   }
 
@@ -44,7 +46,8 @@ for(int i = 20; i >= 0; i-=6)
 
 //Parte do Meio do Coração
 for(int i = 0; i < 3; i++){
-for(int j = 0; j <= 40; j++)
+  printf("\t");
+  for(int j = 0; j <= 40; j++)
   {
     printf("S");
   }
@@ -56,6 +59,7 @@ for(int j = 0; j <= 40; j++)
 /*Parte de Baixo do Coracão*/
     for(int i = 40; i >= 0; i-=4)
     {
+      printf("\t");
       
       for (int k = 0; k < (40-i)/2; k++)
         {
