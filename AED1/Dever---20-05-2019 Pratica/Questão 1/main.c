@@ -15,7 +15,7 @@ int _preencher_matriz(float m[10][10]);
 int main()
 {
     
-    bool maior_que = false;
+    bool maior_que = false, igual;
     float m1[10][10], m2[10][10];
     int dimensoes1, dimensoes2;
 
@@ -48,7 +48,7 @@ int main()
 
         printf("A copia da matriz 1 para a matriz 2 foi um sucesso!\n\n");
     }
-
+    
     return 0;
 }
 

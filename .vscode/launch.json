@@ -5,7 +5,15 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Python: Current File",
+            "type": "java",
+            "name": "Java",
+            "request": "launch",
+            "console": "externalTerminal",
+            "mainClass": ""
+        },
+
+        {
+            "name": "Python3",
             "type": "python",
             "request": "launch",
             "program": "${file}",
