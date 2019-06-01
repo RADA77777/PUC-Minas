@@ -2,7 +2,7 @@
     "tasks": [
         {
             "type": "shell",
-            "label": "gcc-7 build active file",
+            "label": "gcc-7",
             "command": "/usr/bin/gcc-7",
             "args": [
                 "-g",
@@ -10,6 +10,37 @@
                 "-o",
                 "${fileDirname}/${fileBasenameNoExtension}",
                 "-lm"
+            ],
+            "options": {
+                "cwd": "/usr/bin"
+            }
+        },
+        {
+            "type": "shell",
+            "label": "g++-7",
+            "command": "/usr/bin/g++-7",
+            "args": [
+                "-g",
+                "${file}",
+                "-o",
+                "${fileDirname}/${fileBasenameNoExtension}"
+            ],
+            "options": {
+                "cwd": "/usr/bin"
+            },
+            "problemMatcher": [
+                "$gcc"
+            ]
+        },
+        {
+            "type": "shell",
+            "label": "g++-7 build active file",
+            "command": "/usr/bin/g++-7",
+            "args": [
+                "-g",
+                "${file}",
+                "-o",
+                "${fileDirname}/${fileBasenameNoExtension}"
             ],
             "options": {
                 "cwd": "/usr/bin"
