@@ -207,19 +207,36 @@ class Triangulo
     //Resposta da questao 4.3 --- Lista 22
     void static quantTriangulosIguais(Triangulo arrayPonteiroTriangulos[])
     {
-        int quantTriangulosIguais = 0;
+        int quantTriangulosIguais = 0, jaListados[Triangulo::quantTriangulos], index = 0, flag;
 
         for(int i = 0; i < quantTriangulos; i++)
         {
-            for(int j = 0; j < quantTriangulos; j++)
+            flag = 0;
+            for(int j = 0; j < index; j++)
             {
-                if(arrayPonteiroTriangulos[i].triangulosIguais(arrayPonteiroTriangulos, j))
+                if(jaListados[j] == i)
                 {
-                    quantTriangulosIguais++;
+                    flag = 1;
+                }
+            }
+            if(flag == 0)
+            {
+                for(int j = i + 1; j < quantTriangulos; j++)
+                {
+                    if(arrayPonteiroTriangulos[i].triangulosIguais(arrayPonteiroTriangulos, j))
+                    {
+                        quantTriangulosIguais++;
+                        jaListados[index] = j;
+                        index++;
+                    }
                 }
             }
         }
-        std::cout << "Temos " << quantTriangulosIguais<< " triangulos iguais" << std::endl;
+        if(quantTriangulosIguais > 0)
+        {
+            quantTriangulosIguais++;
+        }
+        std::cout << "Temos " << quantTriangulosIguais << " triangulos iguais" << std::endl;
     }
 
     //Resposta da questao 4.4 --- Lista 22
