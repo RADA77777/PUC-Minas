@@ -6,39 +6,54 @@
 
 import java.util.Scanner;
 
+import java.util.Scanner;
+
 public class q10_Rafael_651047
 {
 	public static void main(String[] arguments)
 	{
-        Scanner in = new Scanner(System.in);
-	int quantAlunos = in.nextInt();
-	String[] nomesAlunos = new String[quantAlunos];
+	Aluno aluno = new Aluno(); //Criado objeto aluno
 
-	//Criado um array guardando o nome dos alunos
-	for(int i = 0; i < quantAlunos; i++)
+	aluno.nomesNotasAlunos();
+
+	aluno.outNomesNotas();
+	}
+}
+
+class Aluno
+{
+	private int quantAlunos;
+	private String[] nomesAlunos;
+	private int[][] notasAlunos; //Atributos globais disponiveis a fim de facilitar o uso dos dois metodos da classe
+
+	public void nomesNotasAlunos()
 	{
-		nomesAlunos[i] = in.next(); 
+		Scanner in = new Scanner(System.in);
+
+		this.quantAlunos = in.nextInt();
+		this.nomesAlunos = new String[this.quantAlunos];  // Assim que eh dada a quantidade de alunos na sala, os arranjos sao
+														  // instanciados para o programa saber quantos itens terá em cada arranjo
+		this.notasAlunos = new int[this.quantAlunos][4];
+
+		for(int i = 0; i < this.quantAlunos; i++)
+		{
+			this.nomesAlunos[i] = in.next(); //Criado um array guardando o nome dos alunos
+		}
+
+		for(int i = 0; i < this.quantAlunos; i++)
+		{
+			for(int j = 0; j < 4; j++)
+			{
+				this.notasAlunos[i][j] = in.nextInt();//Notas dos alunos sao inseridas em uma matriz		
+			}
+		}
 	}
 
-        int[][] notasAlunos = new int[quantAlunos][4];
-
-        //Notas dos alunos sao inseridas em uma matriz
-	for(int i = 0; i < quantAlunos; i++)
-        {
-		for(int j = 0; j < 4; j++)
-                {
-			notasAlunos[i][j] = in.nextInt();		
-                }
-        }
-        
-	outNomesNotas(nomesAlunos, notasAlunos, quantAlunos);
-	in.close();
-	}
-	
-	public static void outNomesNotas(String[] nomesAlunos, int[][] notasAlunos, int quantAlunos)
+	public void outNomesNotas()
 	{
 		int somaNota, maiorNota = Integer.MIN_VALUE, alunoMaiorNota = 0;
 		Double somaNotasProva = 0.0;
+		
 		for(int i = 0; i < quantAlunos; i++)
 		{
 			somaNota = 0; //A variavel somaNota é resetada para 0 a cada novo aluno cuja nota vai ser somada
@@ -71,4 +86,6 @@ public class q10_Rafael_651047
 		//Printado nome e nota do aluno com maior nota
 		System.out.println(nomesAlunos[alunoMaiorNota] + " " + maiorNota);
 	}
-}
+
+	}
+	

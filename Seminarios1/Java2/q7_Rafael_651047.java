@@ -67,11 +67,12 @@ public class q7_Rafael_651047
 	boolean somasIguais = true;
 	for(int i = 0; i < ordem; i++)
 	{
-	    if( (somaLinhas[i] != somaDiagonal) || (somaColunas[i] != somaDiagonal)) /* 
-										     * Se a soma de diagonais, colunas e linhas deve ser igual,
-										     * pode-se verificar mais rapido se o quadrado é magico
-										     * ao comparar apenas a soma de linhas e colunas à diagonal
-										     */
+		/* 
+		* Se a soma de diagonais, colunas e linhas deve ser igual,
+		* pode-se verificar mais rapido se o quadrado é magico
+		* ao comparar apenas a soma de linhas e colunas à diagonal
+		 */
+	    if( (somaLinhas[i] != somaDiagonal) || (somaColunas[i] != somaDiagonal))
 	    {
 		somasIguais = false;
 		break;

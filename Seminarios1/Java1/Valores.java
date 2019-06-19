@@ -1,3 +1,10 @@
+/*
+* Aluno: Rafael Amauri Diniz Augusto
+* Turno: Manhã
+* Professor: João Caram
+* Questão 1
+*/
+
 import java.util.Scanner;
 
 public class Valores
@@ -8,26 +15,29 @@ public class Valores
 		Scanner ler = new Scanner(System.in);
 		
 		int quantidade = ler.nextInt();
-		int[] numeros = new int[quantidade];
+		int[] numeros = new int[quantidade]; 
 		
 		int soma = 0;
 		int soma_Pares = 0;
 		int maior = Integer.MIN_VALUE;
 		double media;
-		String media_Formatada;
 		int acima_Media = 0;
+
+		/*
+		* Aqui eh analisado cada elemento do arranjo 
+		*/
 
 		for(int i = 0; i < quantidade; i++)
 		{
 			numeros[i] = ler.nextInt();
 			soma += numeros[i];
 
-			if(numeros[i] % 2 == 0)
+			if(numeros[i] % 2 == 0) //Checado se o elemento é par
 			{
 				soma_Pares += numeros[i];
 			}
 
-			if(numeros[i] > maior)
+			if(numeros[i] > maior) //Aqui é feito para determinar qual o maior elemento do arranjo
 			{
 				maior = numeros[i]; 
 			}
@@ -39,13 +49,10 @@ public class Valores
 		{
 			if(numeros[i] < media)
 			{
-				acima_Media++;
+				acima_Media++; //Aqui eh determinado quantos elementos do arranjo estão acima da média
 			}
 		}
-		
-		media_Formatada = Double.toString(media);
-		media_Formatada = media_Formatada.replace(".", ",");
 
-		System.out.printf("%d\n%d\n%s\n%d", soma_Pares, maior, media_Formatada, acima_Media);
+		System.out.printf("%d\n%d\n%.2f\n%d", soma_Pares, maior, media, acima_Media);
 	}
 }

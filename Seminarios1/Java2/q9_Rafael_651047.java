@@ -10,67 +10,89 @@ public class q9_Rafael_651047
 {
 	public static void main(String[] arguments)
 	{
-        Scanner in = new Scanner(System.in);
-	int quantAlunos = in.nextInt();
-        String[] nomesAlunos = new String[quantAlunos];
-        //Criado um array guardando o nome dos alunos
-	for(int i = 0; i < quantAlunos; i++)
-	{
-		nomesAlunos[i] = in.next(); 
-	}
+	Aluno aluno = new Aluno(); //Criado objeto aluno
 
-        int[][] notasAlunos = new int[quantAlunos][4];
-        //Notas dos alunos sao inseridas em uma matriz
-	for(int i = 0; i < quantAlunos; i++)
+	aluno.nomesNotasAlunos();
+
+	aluno.outNomesNotas();
+	}
+}
+
+class Aluno
+{
+	private int quantAlunos;
+	private String[] nomesAlunos;
+	private int[][] notasAlunos; //Atributos globais disponiveis a fim de facilitar o uso dos dois metodos da classe
+
+	public void nomesNotasAlunos()
 	{
-		for(int j = 0; j < 4; j++)
+		Scanner in = new Scanner(System.in);
+
+		this.quantAlunos = in.nextInt();
+		this.nomesAlunos = new String[this.quantAlunos];  // Assim que eh dada a quantidade de alunos na sala, os arranjos sao
+														  // instanciados para o programa saber quantos itens terá em cada arranjo
+		this.notasAlunos = new int[this.quantAlunos][4];
+
+		for(int i = 0; i < this.quantAlunos; i++)
 		{
-			notasAlunos[i][j] = in.nextInt();		
+			this.nomesAlunos[i] = in.next(); //Criado um array guardando o nome dos alunos
+		}
+
+		for(int i = 0; i < this.quantAlunos; i++)
+		{
+			for(int j = 0; j < 4; j++)
+			{
+				this.notasAlunos[i][j] = in.nextInt();//Notas dos alunos sao inseridas em uma matriz		
+			}
 		}
 	}
-	outNomesNotas(nomesAlunos, notasAlunos, quantAlunos);
-	in.close();
-	}
-	
-	public static void outNomesNotas(String[] nomesAlunos, int[][] notasAlunos, int quantAlunos)
-	{
-		int somaNota, aprovados = 0, reprovados = 0;
-		Double media;
-		for(int i = 0; i < quantAlunos; i++)
-		{
-                        //A variavel somaNota é resetada para 0 a cada novo aluno cuja nota vai ser somada
-			somaNota = 0; 
-                        
-                        // É acrescentada à variavel somaNota o valor presente na matriz[i][j]
-                        for(int j = 0; j < 4; j++)
-			{
-				somaNota += notasAlunos[i][j]; 
-                        }
 
-                        // Nome do aluno é printado
-                        System.out.printf("%s ", nomesAlunos[i]); 
-                        
-                        //Se aprovado, o nome é seguido de "APROVADO"
+	public void outNomesNotas()
+	{
+		int somaNota, quantAprovados = 0, quantReprovados = 0;
+		boolean aprovado;
+		Double media;
+
+		for(int i = 0; i < this.quantAlunos; i++)
+		{
+			aprovado = false;
+			somaNota = 0; //As variaveis somaNota e aprivado sao resetadas para 0 a cada
+				      // novo aluno cuja nota vai ser somada
+
+			for(int j = 0; j < 4; j++)
+			{
+				somaNota += this.notasAlunos[i][j]; // É acrescentada à variavel somaNota o valor presente na matriz
+			}
+
+			// Se a nota for maior ou igual a 60, o aluno eh considerado aprovado
 			if(somaNota >= 60)
 			{
-				System.out.println("APROVADO"); 
-				aprovados++;
-                        }
-                        
-                        //Se reprovado, o nome é seguido de "REPROVADO"
+				aprovado = true;
+				quantAprovados++; 
+			}
+			else
+			{
+				quantReprovados++;
+			}
+			System.out.printf("%s ", this.nomesAlunos[i]);
+			if(aprovado)
+			{
+				System.out.println("APROVADO");
+			}
 			else
 			{
 				System.out.println("REPROVADO");
-				reprovados++;
 			}
+
 		}
-                media = (aprovados/Double.valueOf(quantAlunos)) * 100;
-                /*
-		* Printado a quantidade de aprovados, de
+		/*
+		* Printando a quantidade de aprovados, de
 		* reprovados e a média
 		*/ 
-		System.out.println(aprovados + " APROVADOS\n" + 
-						   reprovados + " REPROVADOS\n" + 
-						   media.intValue() + "%");
+		media = (quantAprovados/Double.valueOf(quantAlunos)) * 100;
+		System.out.println(quantAprovados + " APROVADOS\n" + 
+						quantReprovados + " REPROVADOS\n" + 
+						media.intValue() + "%");
 	}
 }
+	

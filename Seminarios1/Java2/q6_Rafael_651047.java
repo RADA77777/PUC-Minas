@@ -1,10 +1,11 @@
+import java.util.Scanner;
+
 // Questão: 6
 // Nome completo do aluno: Rafael Amauri Diniz Augusto
 // Número de matrícula: 651047
 // Turno: Manhã
 // Nome do professor: João Caram Santos de Oliveira Adriano
 
-import java.util.Scanner;
 
 public class q6_Rafael_651047
 {
