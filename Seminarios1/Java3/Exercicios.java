@@ -1,4 +1,8 @@
 import java.util.Scanner;
+import java.util.List;
+import java.util.ArrayList;
+import java.lang.Math;
+import java.lang.StringBuilder;
 
 interface Runnable 
 {
@@ -11,18 +15,17 @@ interface Runnable
  * @author Rafael Amauri Diniz Augusto
  *
  */
-class Exercicio1 implements Runnable
+class Questao1 implements Runnable
 {
-	private int base, numero;
-	private double resto;
+	private int base, numero, resto;
 	private String numConvertido = new String();
 	Scanner in = new Scanner(System.in);
-
+	
 	public void run()
 	{
+		System.out.println("Comecando exercicio 1...\n");
 		setBase();
 		setNumero();
-		in.close();
 		converter(base, numero);
 		resultado();
 	}
@@ -42,28 +45,33 @@ class Exercicio1 implements Runnable
 		this.numero = in.nextInt();
 	}
 
+	/*
+	* Para converter de base 10 para uma base N, basta pegar o resto da divisao e concatena-lo 
+	* a uma string ate que o numero decimal fique menor que a base N. Ex.: numero = 6; base = 2
+	* 6 / 2 = resto 0 -> Numero vira 3 -> 3/2 = resto 1 -> numero vira 1.5 -> 1.5 / 2 = resto 1;
+	* Com isso, nosso numero convertido sera 011. Mas a resposta certa pede que a string seja revertida.
+	* Por isso usamos a expressao numConvertido = new StringBuilder(numConvertido).reverse().toString()
+	* para reverte-la
+	*/
 	public void converter(int base, int numero)
 	{
 		if(numero < base)
 		{
 			numConvertido = numConvertido.concat(Integer.toString(numero));
+			numConvertido = new StringBuilder(numConvertido).reverse().toString();
 			return;
 		}
 		resto = numero % base;
-		numConvertido = numConvertido.concat(Integer.toString((int)resto));
+		numConvertido = numConvertido.concat(Integer.toString(resto));
 		converter(base, numero/base);
 		return;
 	}
 
 	public void resultado()
 	{
-		StringBuilder numConvertidoFormatado = new StringBuilder();
-		numConvertidoFormatado.append(numConvertido);
-		numConvertidoFormatado = numConvertidoFormatado.reverse();
-
 		System.out.println("O numero " + this.numero +
 						   " na base " + this.base +
-						   " vale " + numConvertidoFormatado);
+						   " vale " + this.numConvertido);
 	}
 }
 
@@ -74,17 +82,18 @@ class Exercicio1 implements Runnable
  *
  */
 
-class Exercicio2 implements Runnable
+class Questao2 implements Runnable
 {
 	int multiplicado, dividendo;
 	Scanner in = new Scanner(System.in);
 
 	public void run()
 	{
+		System.out.println("\nComecando exercicio 2...\n");
 		setMult();
 		setDiv();
-		in.close();
 		System.out.println(multiplicado + " * 2 = " + multiplicar(multiplicado, 2));
+		System.out.println(dividendo + " / 2 = " + dividir(dividendo));
 	}
 
 	public void setMult()
@@ -112,8 +121,168 @@ class Exercicio2 implements Runnable
             multiplicador /= 2; 
         } 
         return resposta; 
-    } 
+	} 
+	
+	public int dividir(int dividendo)
+	{
+		int resposta;
+		if(dividendo % 2 != 0)
+		{
+			System.out.println("Como o dividendo nao eh par, a divisao nao sera exata!");
+		}
+		resposta = dividendo >> 1;
+		return resposta;
+	}
 }
+
+/**
+ * Classe para resolucao do problema 3
+ * 
+ * @author Rafael Amauri Diniz Augusto
+ *
+ */
+
+class Extra1 implements Runnable
+{
+	Scanner in = new Scanner(System.in);
+	String numHexOctal = new String() , numeroBinario = new String();
+	int numeroDecimal;
+
+	public void run()
+	{
+		System.out.println("\nComecando exercicio 3...\n");
+		setBinario();
+		converterParaDecimal(numeroBinario);
+		converterParaHex(this.numeroDecimal);
+
+		System.out.println("\nO numero " + numeroBinario + 
+						   "\nEm decimal vale " + this.numeroDecimal +
+						   "\nEm hexadecimal vale " + numHexOctal);	
+		
+		resetarStringHexOctal();				
+		converterParaOctal(this.numeroDecimal);
+		System.out.println("Em octal vale " + numHexOctal);
+	}
+
+	public void setBinario()
+	{
+		System.out.println("Digite um numero em binario");
+		numeroBinario = in.next();
+	}
+
+	/*
+	* Esse codigo serve para devolver uma lista de strings, que contem a string numero binario
+	* divida em partes de 3, para ficar mais facil fazer a conta com octais. Ela tambem teve que ser revertida
+	* para fazer a conta com expoentes na funcao devolverDecimal()
+	*/
+	public List<String> pegarPartes(String string, int tamanhoParticao){
+		List<String> partes = new ArrayList<String>();
+		string = new StringBuilder(string).reverse().toString();
+		int tam = string.length();
+
+        for (int i = 0; i < tam; i += tamanhoParticao)
+        {
+            partes.add(string.substring(i, Math.min(tam, i + tamanhoParticao)));
+        }
+        return partes;
+	}
+	
+	/*
+	* A ideia aqui é converter binario para decimal usando octais. Octais sao conjuntos de 3 numeros binarios
+	* juntos, logo é possivel converter para decimal. Como entrada usando o numero 101100: A funcao
+	* pegarPartes manda listas strings de tamanho maximo 3 (octal = 3 bits). A logica eh fazer para a 1 parte
+	* (1 x numero x pow(8, expoente)) + (2 x numero x pow(8, expoente) + (4 x numero x pow(8, expoente)). 
+	* O expoente aumenta a cada conjunto de numeros. No primeiro conjunto
+	* (no exemplo: 100), expoente = 0, e no segundo conjunto(101), expoente = 1 
+	*/
+	public void converterParaDecimal(String numeroBinario)
+	{
+		int expoente = 0, soma = 0;
+		for(String parte : pegarPartes(numeroBinario, 3))
+		{
+			for(int j = 0; j < parte.length(); j++)
+			{
+				if(parte.toCharArray()[j] == '1')
+				{
+					soma += Math.pow(2,j) * Math.pow(8, expoente);
+				}
+			}
+			expoente++;
+		}
+		this.numeroDecimal = soma;
+		return;
+	}
+
+	/*
+	* A logica é a mesma da funcao converter() da classe Questao 1
+	*/
+	public void converterParaOctal(int numero)
+	{
+		if(numero < 8)
+		{
+			numHexOctal = numHexOctal.concat(Integer.toString(numero));
+			numHexOctal = new StringBuilder(numHexOctal).reverse().toString();
+			return;
+		}
+		int resto = numero % 8;
+
+		numHexOctal = numHexOctal.concat(Integer.toString((int)resto));
+		converterParaOctal(numero/8);
+		return;
+	}
+
+	public void converterParaHex(int numero)
+	{
+		if(numero < 16)
+		{
+			numHexOctal = numHexOctal.concat(Integer.toString(numero));
+			numHexOctal = new StringBuilder(numHexOctal).reverse().toString();
+			return;
+		}
+		int resto = numero % 16;
+		boolean restoMenor10 = true;
+
+		if(resto >= 10)
+		{
+			restoMenor10 = false;
+			switch (resto)
+			{
+				case 10:
+					numHexOctal = numHexOctal.concat("A");
+					break;
+				case 11:
+					numHexOctal = numHexOctal.concat("B");
+					break;
+				case 12:
+					numHexOctal = numHexOctal.concat("C");
+					break;
+				case 13:
+					numHexOctal = numHexOctal.concat("D");
+					break;
+				case 14:
+					numHexOctal = numHexOctal.concat("E");
+					break;
+				case 15:
+					numHexOctal = numHexOctal.concat("F");
+					break;
+				default:
+					break;
+			}
+		}
+		if(restoMenor10)
+		{
+			numHexOctal = numHexOctal.concat(Integer.toString(resto));
+		}
+		converterParaHex(numero/16);
+		return;
+	}
+
+	public void resetarStringHexOctal()
+	{
+		numHexOctal = "";
+	} 
+}
+
 
 /**
  * Esta classe exemplifica o poder dado pelas interfaces.
@@ -150,9 +319,13 @@ public class Exercicios {
 	 */
 	public static void main(String[] args) 
 	{
-		Exercicios lista = new Exercicios();
-		Exercicio2 exercicio1 = new Exercicio2();
-		lista.runExercicio(exercicio1);
+		Runnable[] listaExercicios = new Runnable[3];
+		Exercicios exercicios = new Exercicios();
+		listaExercicios[0] = new Questao1();
+		listaExercicios[1] = new Questao2();
+		listaExercicios[2] = new Extra1();
+
+		exercicios.runExercicio(listaExercicios);
 	}
 	
 }	// fim Exercicios
