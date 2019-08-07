@@ -5,13 +5,21 @@ public class Palindromo
 		char[] entrada = new char[100];
 		String str = MyIO.readLine();
 		int tam = str.length();
+        
+        entrada = str2char(str);
+        int quantEspacos = contaEspacos(entrada, tam);
+        entrada = removeEspaco(entrada, tam);
+        tam -= quantEspacos;
+       	
 		
-
-		char[] entradaReversa = new char[100];
-		entrada = str2char(str);
-		entrada = removeEspaco(entrada);
-		entradaReversa = reverterPalavra(entrada);
-
+        if(isPalindromo(entrada, tam))
+        {
+            MyIO.println("SIM");
+        }
+        else
+        {
+            MyIO.println("NAO");
+        }
 	}
 
 
@@ -32,33 +40,55 @@ public class Palindromo
 	/*
 	 * Recebe um char[] e remove todos espacos dele 
 	 */
-	public static char[] removeEspaco(char[] entrada)
+	public static char[] removeEspaco(char[] entrada, int tam)
 	{
-		for(int i = 0; i < entrada.length; i++)
+		for(int i = 0; i < tam; i++)
 		{
 			if(entrada[i] == ' ')
 			{
-				for(int j = 0; j < (entrada.length - 1); j++)
+				for(int j = i; j < (tam - 1); j++)
 				{
 					entrada[j] = entrada[j+1];
-				}
-				entrada = removeEspaco(entrada);
+               			}
+				entrada[tam-1] = '\0';
+				entrada = removeEspaco(entrada, tam - 1);
 			}
 		}
 		return entrada;
 	}
 
-	public static char[] reverterPalavra(char[] entrada)
+
+    /*
+    * Checa se uma palavra eh palindromo
+    */
+	public static boolean isPalindromo(char[] entrada, int tam)
 	{
-		char aux;
+        boolean isPalindromo = true;
 		int cont = 0;
-		for(int i = entrada.length - 1; i > (entrada.length/2); i--)
+		for(int i = tam; i > (tam/2); i--)
 		{
-			aux = entrada[cont];
-			entrada[cont] = entrada[i];
-			entrada[i] = aux;
+            if(entrada[i - 1] != entrada[cont])
+            {
+                isPalindromo = false;
+                break;
+            }
 			cont++;
-		}
-		return entrada;
-	}
+        }
+        
+        return isPalindromo;
+    }
+    
+    public static int contaEspacos(char[] entrada, int tam)
+    {
+        int quantEspacos = 0;
+        for(int i = 0; i < tam; i++)
+        {
+            if(entrada[i] == ' ')
+            {
+                quantEspacos++;
+            }
+        }
+
+        return quantEspacos;
+    }
 }
