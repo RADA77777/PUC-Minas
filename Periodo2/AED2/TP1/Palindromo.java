@@ -1,94 +1,107 @@
 public class Palindromo
 {
 	public static void main(String[] args)
-	{
-		char[] entrada = new char[100];
-		String str = MyIO.readLine();
-		int tam = str.length();
-        
-        entrada = str2char(str);
-        int quantEspacos = contaEspacos(entrada, tam);
-        entrada = removeEspaco(entrada, tam);
-        tam -= quantEspacos;
-       	
+	{	
+		char[] entradaChar = new char[1000];
+		int tam;
+		boolean notFim;
+		int quantEspacos;
+		String entradaString = new String();
+
+		do{
+			entradaString = MyIO.readLine();
+			notFim = notFim(entradaString);
+			if(notFim)
+			{
+				str2char(entradaString, entradaChar);
+        			tam = entradaString.length();
+        			quantEspacos = removeEspaco(entradaChar, tam);
+				tam -= quantEspacos;
 		
-        if(isPalindromo(entrada, tam))
-        {
-            MyIO.println("SIM");
-        }
-        else
-        {
-            MyIO.println("NAO");
-        }
+        			if(isPalindromo(entradaChar, tam))
+        			{
+					MyIO.println("SIM");
+        			}
+
+        			else
+        			{
+					MyIO.println("NAO");
+        			}
+			}
+		} while(notFim);
 	}
 
 
 	/*
 	 * Converte de String para array de caracteres
 	 */
-	public static char[] str2char(String str)
+	public static void str2char(String entradaString, char[] entradaChar)
 	{
-		char[] entrada = new char[100];
-		for(int i = 0; i < str.length(); i++)
+		for(int i = 0; i < entradaString.length(); i++)
 		{
-			entrada[i] = str.charAt(i);
+			entradaChar[i] = entradaString.charAt(i);
 		}
-		return entrada;
 	}
 	
 
 	/*
-	 * Recebe um char[] e remove todos espacos dele 
+	 * Recebe um char[] e remove todos espacos dele. Retorna a quatidade
+	 * de espacos que a palavra tinha, para assim saber o tamanho depois
+	 * de os espacos terem sido removidos
 	 */
-	public static char[] removeEspaco(char[] entrada, int tam)
+	public static int removeEspaco(char[] entradaChar, int tam)
 	{
+		int quantEspacos = 0;
+
 		for(int i = 0; i < tam; i++)
 		{
-			if(entrada[i] == ' ')
+			if(entradaChar[i] == ' ')
 			{
+				quantEspacos++;
 				for(int j = i; j < (tam - 1); j++)
 				{
-					entrada[j] = entrada[j+1];
+					entradaChar[j] = entradaChar[j+1];
                			}
-				entrada[tam-1] = '\0';
-				entrada = removeEspaco(entrada, tam - 1);
+				entradaChar[tam-1] = '\0';
 			}
 		}
-		return entrada;
+		return quantEspacos;
 	}
 
 
     /*
-    * Checa se uma palavra eh palindromo
+    * Checa se uma palavra eh palindromo, retorna true ou false
     */
-	public static boolean isPalindromo(char[] entrada, int tam)
+	public static boolean isPalindromo(char[] entradaChar, int tam)
 	{
-        boolean isPalindromo = true;
+        	boolean isPalindromo = true;
 		int cont = 0;
 		for(int i = tam; i > (tam/2); i--)
 		{
-            if(entrada[i - 1] != entrada[cont])
-            {
-                isPalindromo = false;
-                break;
-            }
+            		if(entradaChar[i - 1] != entradaChar[cont])
+            		{
+                		isPalindromo = false;
+                		break;
+            		}
 			cont++;
-        }
+        	}
         
-        return isPalindromo;
-    }
-    
-    public static int contaEspacos(char[] entrada, int tam)
-    {
-        int quantEspacos = 0;
-        for(int i = 0; i < tam; i++)
-        {
-            if(entrada[i] == ' ')
-            {
-                quantEspacos++;
-            }
+		return isPalindromo;
+    	}
+        
+    	/*
+         * Verifica se a palavra inserida pelo usuario eh igual a FIM. Se for diferente, retorna True
+         */
+	public static boolean notFim(String entradaString)
+	{
+		boolean notFim = false;
+
+                if(entradaString.charAt(0) != 'F' || entradaString.charAt(1) != 'I' || entradaString.charAt(2) != 'M')
+                {
+                        notFim = true;
+                }
+
+                return notFim;
         }
 
-        return quantEspacos;
-    }
 }
