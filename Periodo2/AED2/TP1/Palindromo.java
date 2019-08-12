@@ -5,7 +5,6 @@ public class Palindromo
 		char[] entradaChar = new char[1000];
 		int tam;
 		boolean notFim;
-		int quantEspacos;
 		String entradaString = new String();
 
 		do{
@@ -15,8 +14,6 @@ public class Palindromo
 			{
 				str2char(entradaString, entradaChar);
         			tam = entradaString.length();
-        			quantEspacos = removeEspaco(entradaChar, tam);
-				tam -= quantEspacos;
 		
         			if(isPalindromo(entradaChar, tam))
         			{

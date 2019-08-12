@@ -2,7 +2,6 @@
 #include <string.h>
 #include <stdbool.h>
 
-void removerEspacos(char entrada[]);
 bool isPalindromo(char entrada[]);
 
 int main()
@@ -16,8 +15,6 @@ int main()
 	
 		if(notFim) //Se entrada for diferente de FIM, a execucao continua
 		{
-			removerEspacos(entrada);
-	
 	
 			if(isPalindromo(entrada))
 			{
@@ -29,26 +26,8 @@ int main()
 			}
 		}
 	}while(notFim);
-	return 0;
-}
 
-
-/*
-*	Recebe um array de char e deleta todos espacos presentes
-*/
-void removerEspacos(char entrada[])
-{
-	for(int i = 0; i < strlen(entrada); i++)
-	{
-		if(entrada[i] == ' ')
-		{
-			for(int j = i; j < strlen(entrada) - 1; j++)
-			{
-				entrada[j] = entrada[j+1];
-			}
-			entrada[strlen(entrada) - 1] = '\0';
-		}
-	}
+	return 0; 
 }
 
 /*

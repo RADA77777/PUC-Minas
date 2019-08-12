@@ -1,21 +1,18 @@
-public class Ciframento
+public class CiframentoRecursivo
 {
 	public static void main(String[] args)
 	{	
 		char[] entradaChar = new char[1000];
-		int tam;
 		boolean notFim;
 		String entradaString = new String();
 
 		do{
 			entradaString = MyIO.readLine();
-			notFim = notFim(entradaString); // Verifica se a entrada eh igual a "FIM"
+			notFim = notFim(entradaString); // Verifica se a string eh igual a "FIM"
 			if(notFim)
 			{
 				str2char(entradaString, entradaChar);
-        			tam = entradaString.length();
-		
-        			encriptar(entradaChar, tam);
+        			encriptar(entradaChar, 0);
 			}
 		} while(notFim);
 	}
@@ -39,11 +36,12 @@ public class Ciframento
     * somar 0x0 a um valor inteiro pega o valor char referente a 
     * tal inteiro na tabela ASCII
     */
-	public static void encriptar(char[] entradaChar, int tam)
+	public static void encriptar(char[] entradaChar, int index)
 	{
-		for(int i = 0; i < tam; i++)
+		if(index < entradaChar.length)
 		{
-			MyIO.print((char)(entradaChar[i] + 3 + 0x0));
+			MyIO.print((char)(entradaChar[index] + 3 + 0x0));
+			encriptar(entradaChar, index+1);
         	}
 		MyIO.println("");
 		return;

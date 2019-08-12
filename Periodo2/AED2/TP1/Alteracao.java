@@ -4,27 +4,27 @@ public class Alteracao
 	public static void main(String[] args)
 	{	
 		char[] entradaChar = new char[1000];
-		int tam;
 		boolean notFim;
-		int quantEspacos;
 		String entradaString = new String();
+		Random gerador = new Random(); // Gerador
+                gerador.setSeed(4);
 
 		do{
 			entradaString = MyIO.readLine();
+			int tam = entradaString.length();
 			notFim = notFim(entradaString);
 			if(notFim)
 			{
 				str2char(entradaString, entradaChar);
-        			tam = entradaString.length();
-		
-				alterar(entradaChar, tam);
-			}
+        			tam = entradaString.length();	
+				alterar(entradaChar, tam, gerador);
+			}	
 		} while(notFim);
 	}
 
 
 	/*
-	 * Converte de String para array de caracteres
+	 * Converte de String para array de caracteres para que eu possa editar os chars
 	 */
 	public static void str2char(String entradaString, char[] entradaChar)
 	{
@@ -36,18 +36,13 @@ public class Alteracao
 	
 
 
-    /*
-    * Retorna a mensagem encriptada com a cifra de césar
-    * somar 0x0 a um valor inteiro pega o valor char referente a 
-    * tal inteiro na tabela ASCII
-    */
-	public static void alterar(char[] entradaChar, int tam)
+    	/*
+    	*	gera um numero com a seed e troca um pelo outro
+    	*/
+	public static void alterar(char[] entradaChar, int tam, Random gerador)
 	{
-		Random gerador = new Random();
-		gerador.setSeed(4);
 		char char1 = (char)('a' + (Math.abs(gerador.nextInt()) % 26));
-		char char2 = (char)('a' + (Math.abs(gerador.nextInt()) % 26));
-		MyIO.println(char1 + "  " + char2);	
+		char char2 = (char)('a' + (Math.abs(gerador.nextInt()) % 26));	
 		for(int i = 0; i < tam; i++)
 		{
 			if(entradaChar[i] == char1)
@@ -70,13 +65,17 @@ public class Alteracao
 	public static boolean notFim(String entradaString)
 	{
 		boolean notFim = false;
-
-                if(entradaString.charAt(0) != 'F' || entradaString.charAt(1) != 'I' || entradaString.charAt(2) != 'M')
-                {
-                        notFim = true;
-                }
-
+		if(entradaString.length() >= 3)
+		{
+                	if(entradaString.charAt(0) != 'F' || entradaString.charAt(1) != 'I' || entradaString.charAt(2) != 'M')
+                	{
+                	        notFim = true;
+                	}
+		}
+		else
+		{
+			notFim = true;
+		}
                 return notFim;
         }
-
 }

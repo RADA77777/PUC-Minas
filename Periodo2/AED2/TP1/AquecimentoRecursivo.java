@@ -1,4 +1,4 @@
-class Aquecimento
+class AquecimentoRecursivo
 {
 	public static void main(String[] args)
 	{
@@ -11,7 +11,7 @@ class Aquecimento
 			notFim = notFim(entrada); // Se string for diferente de FIM, a execucao continua
 			if(notFim)
 			{
-				quantMaiusculas = contarMaiusculas(entrada);
+				quantMaiusculas = contarMaiusculas(entrada, 0, 0);
 		
 				MyIO.println(quantMaiusculas);
 				quantMaiusculas = 0;
@@ -24,14 +24,18 @@ class Aquecimento
 	 * Pega o valor decimal de cada caractere e avalia se eh maiusculo. Se for, soma 1 na variavel quantMaiusculas.
 	 * Retorna o valor de quantMaiusculas
 	 */
-  	public static int contarMaiusculas(String entrada)
+  	public static int contarMaiusculas(String entrada, int quantMaiusculas, int index)
 	{
-		int quantMaiusculas = 0;
-		for(int i = 0; i < entrada.length(); i++)
-			if( (int)entrada.charAt(i) >= 65 && (int)entrada.charAt(i) <= 90)
+		if(index < entrada.length()) // Limitando para a funcao nao acessar um index fora da string
+		{
+			// Se o char for maior entre A e Z, aumenta em 1 a quantidade de maiusculas
+		
+			if( (int)entrada.charAt(index) >= 65 && (int)entrada.charAt(index) <= 90)
 			{
 				quantMaiusculas++;
 			}
+			quantMaiusculas = contarMaiusculas(entrada, quantMaiusculas, index+1);
+		}
 		return quantMaiusculas;	
 	}
 	
