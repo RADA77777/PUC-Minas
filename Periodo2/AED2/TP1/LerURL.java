@@ -53,7 +53,7 @@ public class LerURL {
 	public static void contarValores(String pagina, String nomePagina)
 	{
 		MyIO.setCharset("ISO-8859-1");
-		int[] arrayValores = new int[24];
+		int[] arrayValores = new int[25];
 		char[] arrayLetras = { 'a','e','i','o','u','á','é','í','ó','ú','à','è','ì','ò','ù','ã','õ','â','ê','î','ô','û' };
 			
 		for(int i = 0; i < pagina.length(); i++)
@@ -65,23 +65,21 @@ public class LerURL {
 					arrayValores[j]++;
 					j = arrayLetras.length;
 				}
-				/*
-				else if(isConso(pagina.charAt(i)))
-				{
-					arrayValores[22]++;
-				}
-				else if(isBreakline(pagina, i))
-				{
-					i += 3;
-					arrayValores[23]++;
-				}
-				else if(isTable(pagina, i))
-				{
-					i += 6;
-					arrayValores[24]++;
-				}*/
+			}
+			if(isLineBreak(pagina, i))
+			{
+				arrayValores[23]++;
+			}
+			else if(isTable(pagina, i))
+			{
+				arrayValores[24]++;
+			}
+			else if(isConso(pagina.charAt(i)))
+			{
+				arrayValores[22]++;
 			}
 		}
+
 		for(int i = 0; i < arrayValores.length; i++)
 		{
 			MyIO.print(arrayValores[i] + " ");
@@ -112,13 +110,39 @@ public class LerURL {
                 return isConso;
 	}
 
-	public static boolean isBreakline(String entrada, int tam)
+	public static boolean isLineBreak(String entrada, int indexOpenTag)
 	{
-		return true;
+		boolean isLineBreak = false;
+		if(entrada.charAt(indexOpenTag) == '<')
+		{	
+			isLineBreak = true;
+			for(int i = indexOpenTag; i < entrada.length(); i++)
+			{
+				if(entrada.charAt(i) == '>')
+				{
+					for(int j = indexOpenTag+1; j < i; j++)
+					{
+						if(entrada.charAt(j) != ' ' && 
+						entrada.charAt(j) != 'b' && 
+						entrada.charAt(j) != 'r')
+			
+						{
+							isLineBreak = false;
+						}
+			
+						if(entrada.charAt(j) == 'b' && entrada.charAt(j+1) != 'r')
+						{
+							isLineBreak = false;
+						}	
+					}
+				}
+			}
+		}
+	return isLineBreak;	
 	}
 
-	public static boolean isTable(String entrada, int tam)
+	public static boolean isTable(String entrada, int indexOpenTag)
 	{
-		return true;
+		return false;
 	}
 }
