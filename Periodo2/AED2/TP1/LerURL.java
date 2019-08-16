@@ -56,6 +56,7 @@ public class LerURL {
 		int[] arrayValores = new int[25];
 		char[] arrayLetras = { 'a','e','i','o','u','á','é','í','ó','ú','à','è','ì','ò','ù','ã','õ','â','ê','î','ô','û' };
 			
+		int isLineBreak, isTable;
 		for(int i = 0; i < pagina.length(); i++)
 		{
 			for(int j = 0; j < arrayLetras.length; j++)
@@ -66,11 +67,18 @@ public class LerURL {
 					j = arrayLetras.length;
 				}
 			}
-			if(isLineBreak(pagina, i))
+			// A funcao isLineBreak retorna codigo -1 se nao for um <br>, e o numero da 
+			// posicao de '>' - o numero da posicao de '<', para assim saber quantas casas pular no contador i.
+			// IsTable() funciona da mesma maneira
+			isLineBreak = isLineBreak(pagina, i);
+			isTable = isTable(pagina, i);
+			
+			if(isLineBreak != -1)
 			{
 				arrayValores[23]++;
+				i += isLineBreak;
 			}
-			else if(isTable(pagina, i))
+			else if(isTable != -1)
 			{
 				arrayValores[24]++;
 			}
@@ -110,16 +118,16 @@ public class LerURL {
                 return isConso;
 	}
 
-	public static boolean isLineBreak(String entrada, int indexOpenTag)
+	public static int isLineBreak(String entrada, int indexOpenTag)
 	{
-		boolean isLineBreak = false;
+		int isLineBreak = -1;
 		if(entrada.charAt(indexOpenTag) == '<')
 		{	
-			isLineBreak = true;
 			for(int i = indexOpenTag; i < entrada.length(); i++)
 			{
 				if(entrada.charAt(i) == '>')
 				{
+					isLineBreak = i-indexOpenTag;
 					for(int j = indexOpenTag+1; j < i; j++)
 					{
 						if(entrada.charAt(j) != ' ' && 
@@ -127,12 +135,12 @@ public class LerURL {
 						entrada.charAt(j) != 'r')
 			
 						{
-							isLineBreak = false;
+							isLineBreak = -1;
 						}
 			
 						if(entrada.charAt(j) == 'b' && entrada.charAt(j+1) != 'r')
 						{
-							isLineBreak = false;
+							isLineBreak = -1;
 						}	
 					}
 				}
@@ -141,8 +149,8 @@ public class LerURL {
 	return isLineBreak;	
 	}
 
-	public static boolean isTable(String entrada, int indexOpenTag)
+	public static int isTable(String entrada, int indexOpenTag)
 	{
-		return false;
+		return -1;
 	}
 }
