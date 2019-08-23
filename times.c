@@ -14,6 +14,7 @@ struct Time
     char apelidos[100];
     char estadio[50];
     char tecnico[50];
+    char membros[100];
     char liga[50];
     char nomeArquivo[50];
 
@@ -26,9 +27,20 @@ struct Time
 typedef struct Time Time;
 
 
-Time* new_time(char nome[], char apelidos[], char estadio[], char tecnico[], 
-	       char liga[], char nomeArquivo[], int capacidade, int fundacaoDia,
-	       int fundacaoMes, int fundacaoAno, long int paginaTam);
+Time* new_time(char nome[], char apelidos[], char estadio[], char tecnico[],
+	       char membros[], char liga[], char nomeArquivo[], int capacidade, 
+	       int fundacaoDia, int fundacaoMes, int fundacaoAno, long int paginaTam);
+
+
+
+/*
+ * Conjunto de funcoes usadas para achar as datas de fundacao dos times
+ */
+char* filtrarData(char string[]);
+
+int filtarDia(char string[]);
+int filtarMes(char string[]);
+int filtarAno(char string[]);
 
 
 /*
@@ -84,6 +96,7 @@ int main(void)
     
     while(linha != NULL)
     {
+	    
 	    free(linha);
 	    linha = (char*)malloc(100000* sizeof(char));
 	    fscanf(arq, " %[^'\n']s", linha);
@@ -92,28 +105,75 @@ int main(void)
 	    // Se a linha tiver a palavra <table nela, essa sera a linha com os atributos
 	    if(isSubstring(linha, "<table"))
 	    {
-		    char* p;
-		    char nome[100], apelidos[100], data_fundacao[100], tecnico[100];
-		    
-		    linha = removerCaracteres(linha, "\"");// Remove as aspas
-		    linha = removerTags(linha, '<', '>'); // Remove as tags html
-		    linha = removerTags(linha, '&', ';'); // Remove tudo entre & e ;
-		
-		    strcpy(nome, retornarEntreTags(linha, "Full name", "Nickname(s)"));
-		    strcpy(apelidos, retornarEntreTags(linha, "Nickname(s)", "Founded"));
-		
-		    /*
-		     * Terminar de pegar o resto dos atributos do HTML
-		     */
+		    char nome[100], apelidos[100], data_fundacao[100], tecnico[100], estadio[100];
+		    char capacidade[1000], data[100], liga[100];
 
-		    printf("%s\n\n%s\n", nome, apelidos);
+		    
+		    linha = removerCaracteres(linha, "\""    ); // Remove as aspas
+		    linha = removerTags(linha,       '<', '>'); // Remove as tags html
+		    linha = removerTags(linha,       '&', ';'); // Remove tudo entre & e ;
+		    
+			    printf("%s\n\n", linha);	    
+		
+
+		    strcpy(nome,     retornarEntreTags(linha, "Full name",    "Nickname(s)"));
+		    strcpy(apelidos, retornarEntreTags(linha, "Nickname(s)",  "Founded"    ));
+		    strcpy(estadio,  retornarEntreTags(linha, "Ground",       "Capacity"   ));
+		    strcpy(tecnico,  retornarEntreTags(linha, "Head coach",   "League"     ));
+		    strcpy(liga,     retornarEntreTags(linha, "League",       "Website"    )); 
+		    strcpy(data,     retornarEntreTags(linha, "Founded",      "Ground"     ));
+		    
+		    
+		    strcpy(data, filtrarData(data)); 
+		    
+		    int a = filtarDia(data);
 		    break;
-	    }
+           }	    
+	    
     }
 
     return 0;
 }
 
+int filtarDia(char string[])
+{
+	// Salvar dois index: index1, index2. Usar strncpy pra cortar e armazenar em data[1] e data[2]
+
+	
+	char* data[3];
+	char copiaData[30];
+	strcpy(copiaData, string);
+	
+	int index1, index2;
+	data[0] = strtok(copiaData, "-");
+	for(int i = 0; i < strlen(string); i++)
+		
+		if(string[i] == '-')
+		{	
+			index1 = i+1;
+			for(int j = i+1; j < strlen(string); j++)
+				
+				if(string[j] == '-')
+		
+					index2 = j-1;
+					i = strlen(string);
+		}
+	strcpy(copiaData, string);
+	printf("%s\n\n", copiaData);
+	strncpy(copiaData, copiaData+index1, index2-index1);
+
+	
+	printf("%s = ANO\n\n\n", copiaData);
+	return 0;
+}
+
+char* filtrarData(char string[])
+{
+	
+	char* dataFiltrada = retornarEntreTags(string, "(", ")");
+
+	return dataFiltrada;
+}
 
 char* retornarEntreTags(char string[], char str1[], char str2[])
 {
@@ -122,7 +182,7 @@ char* retornarEntreTags(char string[], char str1[], char str2[])
 	char stringEntreTags[10000];
 	memset(&stringEntreTags[0], '\0', sizeof(stringEntreTags));
 	char* p = stringEntreTags;
-
+	
         for(int i = 0; i < strlen(string); i++)
                 
 		if(string[i] == str1[0])
@@ -137,24 +197,25 @@ char* retornarEntreTags(char string[], char str1[], char str2[])
 			
 			if(isStr1)
                                 
-				for(int j = i; j < strlen(string)-1; j++)
+				for(int j = i; j < strlen(string); j++)
                                         
 					if(string[j] == str2[0])
 					{
 						isStr2 = true;
 						for(int k = 0; k < strlen(str2); k++)
-							
+
 							if(string[j+k] != str2[k])
 								
 								isStr2 = false;
-						
 
 						if(isStr1 && isStr2)
-
+						{	
 							strncpy(stringEntreTags, 
 								string + i + strlen(str1),
 								j - i - strlen(str1)
-								);	
+								);
+						
+						}
 					}
 
 		}
@@ -259,10 +320,9 @@ bool isSubstring(char string[], char substring[])
 }
 
 
-Time* new_time(char nome[], char apelidos[], char estadio[],
-	       char tecnico[], char liga[], char nomeArquivo[],
-	       int capacidade, int fundacaoDia, int fundacaoMes,
-	       int fundacaoAno, long int paginaTam)
+Time* new_time(char nome[], char apelidos[], char estadio[], char tecnico[], 
+	       char membros[], char liga[], char nomeArquivo[], int capacidade, 
+	       int fundacaoDia, int fundacaoMes, int fundacaoAno, long int paginaTam)
 
 { 
 	Time* p = malloc(sizeof(Time));
@@ -272,9 +332,10 @@ Time* new_time(char nome[], char apelidos[], char estadio[],
   	strcpy(p->estadio,     estadio);
 	strcpy(p->tecnico,     tecnico);
   	
+	strcpy(p->membros,     membros);
 	strcpy(p->liga,        liga);
 	strcpy(p->nomeArquivo, nomeArquivo);
-  	p->capacidade  = capacidade;
+  	p->capacidade  =       capacidade;
   	
 	p->fundacaoDia = fundacaoDia;
   	p->fundacaoMes = fundacaoMes;
@@ -283,3 +344,4 @@ Time* new_time(char nome[], char apelidos[], char estadio[],
    	
 	return p;
 }
+
