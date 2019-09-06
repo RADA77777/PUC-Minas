@@ -131,8 +131,6 @@ int main(void)
 				
 				    
 				    removerTags(linha, '<', '>');    	
-					
-				    printf("\n\nLinha = %s\n\n\n", linha);
 			     	    strcpy(nome,     retornarEntreTags(linha, "Full name", "</td>"));
 				    strcpy(nome,     removerTags( nome, '&', ';'));
 				
@@ -142,7 +140,7 @@ int main(void)
 				    strcpy(estadio,  retornarEntreTags(linha, "Ground", "</td>"));
 				    strcpy(estadio, removerTags(estadio, '&', ';'));
 
-				    strcpy(capacidadeString, retornarEntreTags(linha, "Capacity", "</td>")); 
+				    strcpy(capacidadeString, retornarEntreTags(linha, "Capacity", "&#91;")); 
 				    strcpy(capacidadeString, removerTags(capacidadeString, '&', ';'));
 				    strcpy(capacidadeString, removerCaracteres(capacidadeString, " "));
 				    strcpy(capacidadeString, removerCaracteres(capacidadeString, "."));
@@ -169,13 +167,22 @@ int main(void)
 				   //Pegar tudo entre Founded e &#59 (dia) e &#59 e &#160 (mes e ano)
 				    strcpy(data, retornarEntreTags(linha, "Founde", "</td>"));
 				   	
-					int* dias = filtrarData(data);
-				    dia = dias[0];
-				    mes = dias[1];
-				    ano = dias[2]; 
-				    
+				    int* dias = filtrarData(data);
+				    char dataStr[3][4];
+				    char aux[80] = {"0"};
+				    for(int i = 0; i < 3; i++)
+				    {
+					sprintf(dataStr[i], "%d", dias[i]);
+					if(strlen(dataStr[i]) == 1)
+					{
+						strcat(aux, dataStr[i]);
+						strcpy(dataStr[i], aux);
+						strcpy(aux, "0");
+					}
+				           	
+				    }
 
-				   printf("\nNome = %s\nApelidos = %s\nEstadio = %s\nTecnico = %s\nCapacidade = %d\nLiga = %s\nData = %d/%d/%d\nTamanho da pagina = %ld\nNome do arquivo = %s\n\n", nome, apelidos, estadio, tecnico, capacidade, liga, dia, mes, ano, tamPag, nomeArquivo);
+				    printf("%s ## %s ## %s/%s/%s ## %s ## %d ## %s ## %s ## %s ## %ld ##\n", nome, apelidos, dataStr[0], dataStr[1], dataStr[2], estadio, capacidade, tecnico, liga, nomeArquivo, tamPag);
 					break;
 		 	    }		    
 		    }
@@ -222,8 +229,8 @@ int* filtrarData(char dataString[])
 	
 	if(strlen(dataString) == 4)
 	{
-		data[0] = 1;
-		data[1] = 1;
+		data[0] = 0;
+		data[1] = 0;
 		data[2] = atoi(dataString);
 		return ponteiroData;
 	}
