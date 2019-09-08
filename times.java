@@ -12,7 +12,7 @@ public class times {
 	    boolean notFim;
 	    String nomeTime = new String();
             
-	    do{
+	    //do{
                         nomeTime = in.nextLine();
                         notFim = notFim(nomeTime); // Se nome do time for diferente de FIM, a execucao continua
                         if(notFim)
@@ -22,21 +22,22 @@ public class times {
 				while ((linha = reader.readLine()) != null)
                 		{
                         		if(linha.contains("infobox vcard"))
-                        		{
-                                		linha = removerEntreTags(linha, "<", ">");
-                                		linha = removerEntreTags(linha, "&", ";");
+					{	
+                                		//linha = removerEntreTags(linha, "Full name", "Nicknames");
+                                		//linha = removerEntreTags(linha, "&", ";");
                                 		System.out.println(linha);
+						break;
                         		}
 
                 		}
                 		reader.close();
             		}
 
-		}while(notFim);
+		//}while(notFim);
     }
     public static String removerEntreTags(String linha, String tag1, String tag2)
     {
-	linha = linha.replaceAll("(?s)" + tag1 + ".*?" + tag2, "");
+	linha = linha.matches("(?s)" + tag1 + ".*?" + tag2);
 	return linha;
     }
 

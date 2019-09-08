@@ -5,33 +5,59 @@ import java.net.MalformedURLException;
 import java.net.URL;
  
 public class LerURL {
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args){
 	MyIO.setCharset("ISO-8859-1");
-	String nome;
+	String nomePagina;
         String endereco;
-	String pagina = "", linha = "";
 	boolean notFim;
+	String[] arrayLetras = { "a","e","i","o","u","á","é","í","ó","ú","à","è","ì","ò","ù","ã","õ","â","ê","î","ô","û" };
+	int[] arrayValores = new int[25];
 	
-        do
+	do
 	{
-		nome = MyIO.readLine();
-		notFim = notFim(nome); // Se string for diferente de FIM, a execucao continua
+		nomePagina = MyIO.readLine();
+		notFim = notFim(nomePagina); // Se string for diferente de FIM, a execucao continua
 		if(notFim)
 		{
-			endereco = "file:///home/rafael/Downloads/a.html";
-			URL url = new URL(endereco);
-			BufferedReader br = new BufferedReader(new InputStreamReader(url.openStream()));
-			while(linha != null)
-			{
-				pagina += linha;
-				linha = br.readLine();
+			endereco = MyIO.readLine();
+			zerarArray(arrayValores);
+			try{
+				lerPagina(endereco, arrayValores, arrayLetras);
 			}
-		
-			contarValores(pagina, nome);
-		}
+			catch(Exception e)
+			{
+				return;
+			}
+			for(int i = 0; i < 21; i++)
+                	{
+                        	MyIO.print(arrayLetras[i] + "(" + arrayValores[i] + ") ");
+                	}
+                	MyIO.print("<br>(" + arrayValores[23] + ") ");
+                	MyIO.print("<table>(" + arrayValores[24] + ") ");
+                	MyIO.println(nomePagina);
+			}
 	} while(notFim);
     }
 
+    	
+    
+    	public static void lerPagina(String endereco, int[] arrayValores, String[] arrayLetras)  throws Exception 
+	{
+		String linha = "";
+		URL url = new URL(endereco);
+                BufferedReader br = new BufferedReader(new InputStreamReader(url.openStream()));
+                zerarArray(arrayValores);
+
+        	while(linha != null)                  
+		{
+      			linha = br.readLine();
+			if(linha != null)
+                        {
+        	                contarValores(linha, arrayValores, arrayLetras);
+                	}
+        	}
+	}
+    
     	/*
 	 * Verifica se a palavra inserida pelo usuario eh igual a FIM. Se for diferente, retorna True
 	 */
@@ -48,20 +74,30 @@ public class LerURL {
 	}
 
 	/*
-	 * Usar a funcao isConso da questao Is pra pegar consoantes, depois usar charAt() pra descobrir as letras. Para <br> e <table>, pensar em ideia
+	 * Set todos valores do array recebido para 0
 	 */
-	public static void contarValores(String pagina, String nomePagina)
+	public static void zerarArray(int[] entrada)
+	{
+		for(int i = 0; i < entrada.length; i++)
+		{
+			entrada[i] = 0;
+		}
+	}
+
+	/*
+	 * Usar a funcao isConso para pegar consoantes, depois usar charAt() pra descobrir as letras. Para <br> e <table>, pensar jogar
+	 * na funcao isTable e isLineBreak
+	 */
+	public static void contarValores(String pagina, int[] arrayValores, String[] arrayLetras)
 	{
 		MyIO.setCharset("ISO-8859-1");
-		int[] arrayValores = new int[25];
-		char[] arrayLetras = { 'a','e','i','o','u','á','é','í','ó','ú','à','è','ì','ò','ù','ã','õ','â','ê','î','ô','û' };
-			
+		
 		int isLineBreak, isTable;
 		for(int i = 0; i < pagina.length(); i++)
 		{
-			for(int j = 0; j < arrayLetras.length; j++)
+			for(int j = 0; j < 21; j++)
 			{
-				if(pagina.charAt(i) == arrayLetras[j])
+				if(pagina.charAt(i) == arrayLetras[j].charAt(0))
 				{
 					arrayValores[j]++;
 					j = arrayLetras.length;
@@ -81,18 +117,13 @@ public class LerURL {
 			else if(isTable != -1)
 			{
 				arrayValores[24]++;
+				i += isTable;
 			}
 			else if(isConso(pagina.charAt(i)))
 			{
 				arrayValores[22]++;
 			}
 		}
-
-		for(int i = 0; i < arrayValores.length; i++)
-		{
-			MyIO.print(arrayValores[i] + " ");
-		}
-		MyIO.println("");
 	}
 
 	public static boolean isConso(char entrada)
@@ -127,10 +158,11 @@ public class LerURL {
 			{
 				if(entrada.charAt(i) == '>')
 				{
-					isLineBreak = i-indexOpenTag;
+					isLineBreak = i - indexOpenTag;	
 					for(int j = indexOpenTag+1; j < i; j++)
 					{
-						if(entrada.charAt(j) != ' ' && 
+						if(
+						entrada.charAt(j) != ' ' &&
 						entrada.charAt(j) != 'b' && 
 						entrada.charAt(j) != 'r')
 			
@@ -138,11 +170,14 @@ public class LerURL {
 							isLineBreak = -1;
 						}
 			
-						if(entrada.charAt(j) == 'b' && entrada.charAt(j+1) != 'r')
+						if(		isLineBreak >= 3 &&
+								entrada.charAt(j) == 'b' && 
+								entrada.charAt(j+1) != 'r')
 						{
 							isLineBreak = -1;
 						}	
 					}
+					i = entrada.length();
 				}
 			}
 		}
@@ -151,6 +186,44 @@ public class LerURL {
 
 	public static int isTable(String entrada, int indexOpenTag)
 	{
-		return -1;
+		int isTable = -1;
+         	if(entrada.charAt(indexOpenTag) == '<')
+         	{
+                        for(int i = indexOpenTag; i < entrada.length(); i++)
+                        {
+                                if(entrada.charAt(i) == '>')
+                                {
+                                        isTable = i - indexOpenTag;
+                                        for(int j = indexOpenTag+1; j < i; j++)
+                                        {
+                                                if(										// CRIAR METODO PRA CHECAR SE EH 'TABLE'
+                                                entrada.charAt(j) != ' ' &&
+                                                entrada.charAt(j) != 't' &&
+                                                entrada.charAt(j) != 'a' &&	
+                                                entrada.charAt(j) != 'b' &&
+                                                entrada.charAt(j) != 'l' &&
+                                                entrada.charAt(j) != 'e'
+						)	
+                                                {
+                                                        isTable = -1;
+                                                }
+
+                                                if(		
+								isTable >= 6 &&
+								entrada.charAt(j) == 't' && 
+								entrada.charAt(j+1) != 'a' &&
+								entrada.charAt(j+2) != 'b' &&
+								entrada.charAt(j+3) != 'l' &&
+								entrada.charAt(j+4) != 'e'
+								)
+                                                {
+                                                        isTable = -1;
+                                                }
+                                        }
+                                        i = entrada.length();
+                                }
+                        }
+                }
+        return isTable;
 	}
 }

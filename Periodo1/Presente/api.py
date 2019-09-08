@@ -1,91 +1,58 @@
-from flask import Flask, jsonify, request
-from sqlalchemy import *
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker, relationship
-import os
+from telegram.ext import CommandHandler, Filters, MessageHandler, Updater
 
-app = Flask(__name__)
+
 json = []
 
-@app.route("/")
-def teste():
-	return '''
-    /get para retornar JSON de todos alunos inseridos
-    /post para inserir novo aluno
-    /del para deletar um aluno
-    '''
+def start(bot, update):
+    msg_introducao = "Olá! Eu seu bot de agenda! Pense em mim como um assistente pessoal. Digite /add para adicionar um novo compromisso, /del para deletar e /lista para listar todos existentes. Mas não se preocupe! Você pode sempre digitar /ajuda para eu te lembrar os comandos!"
+    
+    bot.send_message(
+            chat_id = update.message.chat_id,
+            text = msg_introducao
+            )
+    
+    return 0
 
-@app.route("/get", defaults={'id': -1}, methods=['GET'])
-@app.route("/get/<int:id>", methods=['GET'])
-def get(id):
+
+def get(bot, update):
     
     global json
 
     # Verificando se lista esta vazia
     if not json:
-        return "Não existem alunos ainda. Adicione um, por favor"
+        bot.send_message(
+                chat_id = update.message.chat_id,
+                text = "Opa! Parece que não existem compromissos. Digite /add para adicionar um!"
+                )
 
 
-    if(id != -1):
-        for aluno in json:
-            if(aluno['matricula'] == id):
-                return aluno['nome']
-
-    json.sort(key=lambda s: s['matricula'])
+    json.sort(key=lambda s: s['mes'])
     
-    listaAlunos = ""
-    for aluno in json:
-        listaAlunos +="Nome:   {}\nIdade:   {}\nMatricula:   {}\n\n".format(aluno['nome'], aluno['idade'], aluno['matricula'])
+    agenda = ""
+    for compromisso in json:
+        agenda += f"Data: {compromisso['dia']}/{compromisso['mes']}\nCompromisso:  {agenda['descricao']}\n\n"
+    
+    bot.send_message(
+            chat_id = update.message.chat_id,
+            text = agenda
+            )
 
-    return listaAlunos
+    return 0
 
-
-
-#################################### 
-#
-#
-#  A funcao obtem qual a nova matricula chamando o metodo novaMatricula(), que itera por todos elementos do JSON e procura qual o primeiro 
-#  numero de matricula que nao corresponde a ninguem
-#
-#
-###################################
-@app.route("/post", methods=['POST'])
-def inserir():
+def inserir(bot, update):
 
     global json
-    novos_alunos = request.json
-
-    if(type(novos_alunos) == list):
-        for aluno in novos_alunos:
-            nome = aluno['nome']
-            idade = int(aluno['idade'])
-            matricula = int(novaMatricula())
-            json.append({"nome": nome, "idade": idade, "matricula": matricula})
-
-    else:
-        nome = novos_alunos['nome']
-        idade = int(novos_alunos['idade'])
-        matricula = int(novaMatricula())
-        json.append({"nome": nome, "idade": idade, "matricula": matricula})
-        pass
     
-    return "Inserido!"
+    reply_keyboard = [['Boy', 'Girl', 'Other']]
 
+    update.message.reply_text(
+        'Hi! My name is Professor Bot. I will hold a conversation with you. '
+        'Send /cancel to stop talking to me.\n\n'
+        'Are you a boy or a girl?',
+        reply_markup=ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True))
 
+    return GENDER 
 
-def novaMatricula():
-
-    global json 
-    
-    matriculas = []
-    for aluno in json:
-        matriculas.append(aluno['matricula'])
-    
-    nova_matricula = 0
-    while nova_matricula in matriculas:
-        nova_matricula += 1
-
-    return nova_matricula
 
 
 ###################################
@@ -96,30 +63,44 @@ def novaMatricula():
 #
 ###################################
 
-@app.route("/del/<int:ex_matricula>", methods=['GET'])
-def deletar(ex_matricula):
+#def deletar(bot, update):
 
-    global json
-    matriculas = []
+ #   global json
+  #  matriculas = []
      
-    for aluno in json:
-        matriculas.append(aluno['matricula'])
+   # for aluno in json:
+    #    matriculas.append(aluno['matricula'])
     
 
-    try:
-        assert(ex_matricula in matriculas)
+  #  try:
+   #     assert(ex_matricula in matriculas)
 
-    except AssertionError:
-        return f"O codigo de matricula {ex_matricula} nao foi encontrado; Insira apenas um valor valido!"
+  #  except AssertionError:
+    #    return f"O codigo de matricula {ex_matricula} nao foi encontrado; Insira apenas um valor valido!"
 
-    for i in range(0, len(matriculas)):
-        if(matriculas[i] == ex_matricula):
-            del json[i]
-            break
+    #for i in range(0, len(matriculas)):
+      #  if(matriculas[i] == ex_matricula):
+      #      del json[i]
+      #      break
 
-    return "Deletado!"
+    #return "Deletado!"
+
+def main():
+    updater = Updater(token="962672071:AAELT0qlHLi7a1qKxHjLQqixeYealG1rouY")
+
+    dispatcher = updater.dispatcher
+
+    dispatcher.add_handler(
+        CommandHandler('start', start)
+        )
+    
+    dispatcher.add_handler(
+            CommandHandler('add', inserir)
+            )
+
+    updater.start_polling()
+    updater.idle()
 
 if __name__ == '__main__':
-    port = int(os.environ.get('PORT', 5000))
-    app.run(debug = True, host = '0.0.0.0', port = port)
-
+    print("press CTRL + C to cancel.")
+    main()

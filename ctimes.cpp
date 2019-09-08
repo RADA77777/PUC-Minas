@@ -58,7 +58,7 @@ char* removerCaracteres(char string[], char removidos[]);
  * estiver entre tag1 e tag2 e retorna a string tratada
  */
 
-char* removerTags(char string[], char tag1, char tag2);
+char* removerTags(char string[], char tag1[], char tag2[]);
 
 
 /* 
@@ -130,43 +130,46 @@ int main(void)
 		    		    int dia, mes, ano, capacidade;
 				
 				    
-				    removerTags(linha, '<', '>');    	
-			     	    strcpy(nome,     retornarEntreTags(linha, "Full name", "</td>"));
-				    strcpy(nome,     removerTags( nome, '&', ';'));
+				    removerTags(linha, "<", ">");    	
+				    strcpy(nome,     retornarEntreTags(linha, "Full name", "</td>"));
+				    strcpy(nome,     removerTags( nome, "&", ";"));
 				
 				    strcpy(apelidos, retornarEntreTags(linha, "Nickname(s)", "</td>"));
-                    		    strcpy(apelidos, removerTags(apelidos, '&', ';'));
+                    		    strcpy(apelidos, removerTags(apelidos, "&", ";"));
 				    
 				    strcpy(estadio,  retornarEntreTags(linha, "Ground", "</td>"));
-				    strcpy(estadio, removerTags(estadio, '&', ';'));
-
-				    strcpy(capacidadeString, retornarEntreTags(linha, "Capacity", "&#91;")); 
-				    strcpy(capacidadeString, removerTags(capacidadeString, '&', ';'));
+				    strcpy(estadio, removerTags(estadio, "&", ";"));
+					
+				    strcpy(capacidadeString, retornarEntreTags(linha, "Capacity", "</td>")); 
+				    
+				    strcpy(capacidadeString, removerTags(capacidadeString, "&", ";"));
 				    strcpy(capacidadeString, removerCaracteres(capacidadeString, " "));
 				    strcpy(capacidadeString, removerCaracteres(capacidadeString, "."));
 				    strcpy(capacidadeString, removerCaracteres(capacidadeString, ","));
 				    capacidade = atoi(capacidadeString);
 				
 				    if(isSubstring(linha, "Coach"))
-					strcpy(tecnico, retornarEntreTags(linha, "Coach", "</td"));
+				        strcpy(tecnico, retornarEntreTags(linha, "Coach", "</td>"));
 					
+			    	    else if(isSubstring( linha, "General manager"))
+					strcpy(tecnico, retornarEntreTags(linha, "General manager", "</td>"));
+
 				    else if(isSubstring(linha, "Head coach"))
 				    	strcpy(tecnico,  retornarEntreTags(linha, "Head coach", "</td>"));
-				    
+
 				    else if(isSubstring(linha, "Manager"))
 				    	strcpy(tecnico,  retornarEntreTags(linha, "Manager", "</td>"));
-				  
-					
-				    strcpy(tecnico, removerTags(tecnico, '&', ';'));
 
-				    strcpy(liga, retornarEntreTags(linha, "League", "</td>"));
-				    strcpy(liga, removerTags(liga, '&', ';'));
-				   
+				    
+				    strcpy(tecnico, removerTags(tecnico, "&", ";"));
+
+				    strcpy(liga, retornarEntreTags(linha, ">League", "</td>"));
+				    strcpy(liga, removerTags(liga, "&", ";"));
 
 
 				   //Pegar tudo entre Founded e &#59 (dia) e &#59 e &#160 (mes e ano)
 				    strcpy(data, retornarEntreTags(linha, "Founde", "</td>"));
-				   	
+				    	
 				    int* dias = filtrarData(data);
 				    char dataStr[3][4];
 				    char aux[80] = {"0"};
@@ -182,7 +185,7 @@ int main(void)
 				           	
 				    }
 
-				    printf("%s ## %s ## %s/%s/%s ## %s ## %d ## %s ## %s ## %s ## %ld ##\n", nome, apelidos, dataStr[0], dataStr[1], dataStr[2], estadio, capacidade, tecnico, liga, nomeArquivo, tamPag);
+				    printf("%s ## %s ## %s/%s/%s ## %s ## %d ## %s ## %s ## %s ## %ld ## \n", nome, apelidos, dataStr[0], dataStr[1], dataStr[2], estadio, capacidade, tecnico, liga, nomeArquivo, tamPag);
 					break;
 		 	    }		    
 		    }
@@ -208,11 +211,11 @@ int* filtrarData(char dataString[])
 	char numeroChar[1000];
 
 
-	if(isSubstring(dataString, "&#32"))
+	if(isSubstring(dataString, "&#59"))
 	{
 	
-		strcpy(dataString, retornarEntreTags(dataString, "d", "&#32;"));
-		strcpy(dataString, removerTags(dataString, '#', ';'));
+		strcpy(dataString, retornarEntreTags(dataString, "d", "#59;"));
+		strcpy(dataString, removerTags(dataString, "#", ";"));
 		strcpy(dataString, removerCaracteres(dataString, ","));
 			
 		for(int i = 0; i < strlen(dataString); i++)
@@ -234,7 +237,6 @@ int* filtrarData(char dataString[])
 		data[2] = atoi(dataString);
 		return ponteiroData;
 	}
-
 
 	int index1 = -1, index2 = -1;
 	for(int i = 0; i < strlen(dataString); i++)
@@ -316,6 +318,11 @@ int* filtrarData(char dataString[])
 				data[0] = data[1];
 				data[1] = i+1;
 			}
+			else if(data[0] == 0 && data[1] != i+1)
+			{
+				data[0] = data[1];
+				data[1] = i+1;
+			}
 			else
 			{
 				data[1] = i+1;
@@ -367,16 +374,15 @@ char* retornarEntreTags(char string[], char str1[], char str2[])
 							string + i + strlen(str1),
 							j - i - strlen(str1)
 							);
-					
-						if(isSubstring(stringEntreTags, "ago") && str1 == "(" && str2 == ")")
+						
+						strcpy(stringEntreTags, removerCaracteres(stringEntreTags, "\""));
+						
+						if(isSubstring(stringEntreTags, "&#91"))
 						{
-							memset(stringEntreTags, '\0', sizeof(stringEntreTags));
-							continue;
+							strcpy(stringEntreTags, removerTags(stringEntreTags, "&#91", "&#93;"));
 						}
-						else
-						{	
 						return stringEntreTags;
-						}
+					
 					}
 				}
 
@@ -432,13 +438,17 @@ char* removerCaracteres(char string[], char parteRemovida[])
 }
 
 
-char* removerTags(char string[], char tag1, char tag2)
+char* removerTags(char string[], char tag1[], char tag2[])
 {
+	bool isTag1, isTag2;
 	char* ponteiroString = string;
 
 	for(int i = 0; i < strlen(string); i++)
 	{	 
-		if(string[i] == '<' &&
+        isTag1 = false; 
+        isTag2 = false;
+		
+        if(string[i] == '<' &&
                    string[i+1] == '/' &&
                    string[i+2] == 't' &&
                    string[i+3] == 'd' &&
@@ -446,26 +456,52 @@ char* removerTags(char string[], char tag1, char tag2)
                    {
                         continue;
                    }
-		if(string[i] == tag1)
+
+        if(string[i] == tag1[0])
+        {
+            isTag1 = true;
+            for(int j = 0; j < strlen(tag1); j++)
+            {
+                if(tag1[j] != string[i+j])
+                {
+                    isTag1 = false;
+                    j = strlen(tag1);
+                }
+            }
+        }
+		if(isTag1)
 		{
 			for(int j = i; j < strlen(string); j++)
-				
-				if(string[j] == tag2)
+			{
+				if(string[j] == tag2[0])
 				{
-					
-					for(int k = 0; k < j-i+1; k++)
+                    isTag2 = true;
+                    for(int k = 0; k < strlen(tag2); k++)
+                    {
+                        if(tag2[k] != string[k+j])
+                        {
+                            isTag2 = false;
+                            k = strlen(tag2);
+                        }
+                    }
+                }
+                if(isTag1 && isTag2)
+                {
+					for(int k = 0; k < j-i+strlen(tag2); k++)
 					{
 						for(int x = i; x < strlen(string)-1; x++)
 						{
 							string[x] = string[x+1];
 						}
-					string[strlen(string)-1] = '\0';
+
+					    string[strlen(string)-1] = '\0';
 					}
-					
+
 					i--;
 					j = strlen(string);	
-				}
-		}
+                }            
+            }
+        }
 	}
 	ponteiroString = string;	
 	return ponteiroString;
@@ -502,7 +538,7 @@ Time* new_time(char nome[], char apelidos[], char estadio[], char tecnico[],
 	       int fundacaoDia, int fundacaoMes, int fundacaoAno, long int paginaTam)
 
 { 
-	Time* p = malloc(sizeof(Time));
+	Time* p = (Time*)malloc(sizeof(Time));
   
 	strcpy(p->nome,        nome    );
   	strcpy(p->apelidos,    apelidos);
@@ -521,4 +557,3 @@ Time* new_time(char nome[], char apelidos[], char estadio[], char tecnico[],
    	
 	return p;
 }
-
