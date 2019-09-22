@@ -259,7 +259,7 @@ public class javaq3
 			}
 		}while(notFim);
 		
-		int comparacoes = insertion_sort(times, index);
+		int comparacoes = select_sort(times, index);
 		int movimentacoes = index *2;
 
 		for(int i = 0; i < index; i++)
@@ -283,24 +283,33 @@ public class javaq3
 		}
 	}
 		
-	public static int insertion_sort(Time[] times, int tam)
+	public static int select_sort(Time[] times, int tam)
 	{
 		int comparacoes = 0;
 
 		for(int i = 0; i < tam; i++)
 		{
-			Time tmp = times[i].clone();
-			int j = i-1;
-			
-			while( (j >= 0) && (times[j].getAno() > tmp.getAno()))
-			{
-				times[j+1] = times[j].clone();
-				j--;
-			}
+			int menor = i;
 
-			times[j+1] = tmp.clone();
-		}
+			for(int j = i+1; j < tam; j++)
+			{	
+				Time aux = times[j].clone();
+				
+				comparacoes++;
+				if(times[j].getTamPag() < times[menor].getTamPag())
+				{
+					menor = j;
+				}
+			}
+	
+		Time tmp = new Time();
 		
+		tmp = times[menor].clone();
+		times[menor] = times[i].clone();
+		times[i] = tmp.clone();
+	
+		}
+
 		return comparacoes;
 	}
 
@@ -317,19 +326,14 @@ public class javaq3
         char[] dataChar = dataString.toCharArray();
 		String numeroChar;
 
-		System.out.println(dataString);
-		System.out.println("AQUI");	
-		
-		dataString = retornarEntreTags(dataString, "d", "#32");
-		akoi
-		System.out.println(dataString);
-		
-		dataString = removerTags(dataString, "#", ";");
-	    dataString = removerCaracteres(dataString, ",");
-        dataChar = dataString.toCharArray();
-            
+
 		if(dataString.contains("&#59"))
 		{
+			dataString = retornarEntreTags(dataString, "d", "#59");
+			dataString = removerTags(dataString, "#", ";");
+	        dataString = removerCaracteres(dataString, ",");
+            dataChar = dataString.toCharArray();
+            
             for(int i = 0; i < dataChar.length; i++)
             {
                 if(dataChar[i] == '&')
@@ -344,7 +348,6 @@ public class javaq3
 		dataString = removerCaracteres(dataString, ",");
 		dataString = removerCaracteres(dataString, "d");
 		
-		System.out.println(dataString);
 		if(dataString.length() == 4)
 		{
 			data[0] = 0;
@@ -610,8 +613,7 @@ public class javaq3
 	* Recebe tres strings. Remove tudo que 
 	* estiver entre str1 e str2 e retorna a string tratada
 	*/
-
-public static String removerTags(String string, String tag1, String tag2)
+	public static String removerTags(String string, String tag1, String tag2)
 	{
 
         char[] stringChar = string.toCharArray(); 

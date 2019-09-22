@@ -1,7 +1,6 @@
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.File;
 import java.io.InputStreamReader;
@@ -171,9 +170,10 @@ class Time
 
 					String capacidadeString = javaq3.retornarEntreTags(linha, "Capacity", "</td>"); 
 					
-					capacidadeString = javaq3.removerTags(capacidadeString, " ", ")");
 					capacidadeString = javaq3.removerTags(capacidadeString, "&", ";");
 					capacidadeString = javaq3.removerCaracteres(capacidadeString, " ");
+					// Olhar a barrinha ("-") no capaciade abaixo;
+					kaso // Coloquei aqui pra dar erro
 					capacidadeString = javaq3.removerTags(capacidadeString, "–", ".");
 					capacidadeString = javaq3.removerCaracteres(capacidadeString, ".");
 					capacidadeString = javaq3.removerCaracteres(capacidadeString, ",");
@@ -185,13 +185,13 @@ class Time
 
 					String tecnico;
 
-					if(linha.contains("General manager"))
+					if(linha.contains("Coach"))
+					{
+						tecnico = javaq3.retornarEntreTags(linha, "Coach", "</td>");
+					}
+					else if(linha.contains("General manager"))
 					{
 						tecnico = javaq3.retornarEntreTags(linha, "General manager", "</td>");
-					}
-					else if(linha.contains("Manager"))
-					{
-						tecnico = javaq3.retornarEntreTags(linha, "Manager", "</td>");
 					}
 					else if(linha.contains("Head coach"))
 					{
@@ -199,7 +199,7 @@ class Time
 					}
 					else
 					{
-						tecnico = javaq3.retornarEntreTags(linha, "Coach", "</td>");
+						tecnico = javaq3.retornarEntreTags(linha, "Manager", "</td>");
 					}
 
 					tecnico = javaq3.removerTags(tecnico, "&", ";");
@@ -239,10 +239,11 @@ public class javaq3
 	public static void main(String[] args)
 	{
 		Scanner in = new Scanner(System.in);
-		String nomeArquivo;
-		int index = 0;
-		long inicio = System.nanoTime();
+		String linha, nome, apelidos, tecnico, estadio;
+		String capacidadeString, data, liga, nomeArquivo;
 		boolean notFim;
+		int dia, mes, ano, index = 0;
+		long tamPag, capacidade;
 
 
 		Time[] times = new Time[100];
@@ -258,51 +259,46 @@ public class javaq3
 				index++;
 			}
 		}while(notFim);
-		
-		int comparacoes = insertion_sort(times, index);
-		int movimentacoes = index *2;
 
-		for(int i = 0; i < index; i++)
-			times[i].imprimir();
-
-		long fim = System.nanoTime();
-			
-		try
-		{
-			FileWriter fw = new FileWriter("./651047_selecao.txt");
-			
-			String tempo = Long.toString(fim-inicio);
-			String log = "651047\t"+comparacoes+"\t"+movimentacoes+"\t"+tempo;
-			
-			fw.write(log);
-			fw.close();
-		}
-		catch(Exception erro)
-		{
-			System.out.println(erro);
-		}
+		do{
+  
+                  nome = in.nextLine();
+                  notFim = notFim(nome);
+                  
+                  if(notFim)
+                  {
+                      if(timeExiste(times, nome, index))
+                      {
+                          System.out.println("SIM");
+                      }
+                      else
+                      {
+                          System.out.println("NÃO");
+                      }
+                  }       
+          }while(notFim);
+      
+      
 	}
+  
+      public static boolean timeExiste(Time[] times, String nome, int tam)
+      {
+          boolean existe = false;
+  
+          for(int i = 0; i < tam; i++)
+          {
+              String aux = times[i].getNome();
+              if(aux.contains(nome))
+              {
+                  existe = true;
+                  i = tam;
+              }
+          }
+  
+          return existe;
+      }
 		
-	public static int insertion_sort(Time[] times, int tam)
-	{
-		int comparacoes = 0;
 
-		for(int i = 0; i < tam; i++)
-		{
-			Time tmp = times[i].clone();
-			int j = i-1;
-			
-			while( (j >= 0) && (times[j].getAno() > tmp.getAno()))
-			{
-				times[j+1] = times[j].clone();
-				j--;
-			}
-
-			times[j+1] = tmp.clone();
-		}
-		
-		return comparacoes;
-	}
 
 	//Usada para achar as datas de fundacao dos times
 	public static int[] filtrarData(String dataString)
@@ -317,19 +313,14 @@ public class javaq3
         char[] dataChar = dataString.toCharArray();
 		String numeroChar;
 
-		System.out.println(dataString);
-		System.out.println("AQUI");	
-		
-		dataString = retornarEntreTags(dataString, "d", "#32");
-		akoi
-		System.out.println(dataString);
-		
-		dataString = removerTags(dataString, "#", ";");
-	    dataString = removerCaracteres(dataString, ",");
-        dataChar = dataString.toCharArray();
-            
+
 		if(dataString.contains("&#59"))
 		{
+			dataString = retornarEntreTags(dataString, "d", "#59");
+			dataString = removerTags(dataString, "#", ";");
+	        dataString = removerCaracteres(dataString, ",");
+            dataChar = dataString.toCharArray();
+            
             for(int i = 0; i < dataChar.length; i++)
             {
                 if(dataChar[i] == '&')
@@ -344,7 +335,6 @@ public class javaq3
 		dataString = removerCaracteres(dataString, ",");
 		dataString = removerCaracteres(dataString, "d");
 		
-		System.out.println(dataString);
 		if(dataString.length() == 4)
 		{
 			data[0] = 0;
@@ -610,8 +600,7 @@ public class javaq3
 	* Recebe tres strings. Remove tudo que 
 	* estiver entre str1 e str2 e retorna a string tratada
 	*/
-
-public static String removerTags(String string, String tag1, String tag2)
+	public static String removerTags(String string, String tag1, String tag2)
 	{
 
         char[] stringChar = string.toCharArray(); 
@@ -632,7 +621,7 @@ public static String removerTags(String string, String tag1, String tag2)
 			if(stringChar[i] == tag1.charAt(0))
 			{
                 isTag1 = true;
-                for(int j = 0; j < tag1.length()-1; j++)
+                for(int j = 0; j < tag1.length(); j++)
                 {
                     if(tag1.charAt(j) != stringChar[i + j])
                     {

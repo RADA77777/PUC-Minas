@@ -37,7 +37,6 @@ void inserirPosicao(Time** times, char instrucao[100], int tam, int posicao);
 
 void removerPosicao(Time** times, char instrucao[100], int tam, int posicao);
 
-void selectSort(Time** times, int index, int tam);
 
 void imprimir(Time* time);
 
@@ -83,11 +82,11 @@ Time* ler(char nomeArquivo[], Time* time);
 
 int main(void)
 {   
-	Time* times[100];
+	Time* times[50];
     FILE* arq;
     char nomeArquivo[100];
     bool notFim = 1;
-	int index = 0;
+	int cabeca = 0, fim = 0, soma_anos= 0, quantElementos=0;
    
 
     do
@@ -101,45 +100,57 @@ int main(void)
 		int quantElementos;
 		if(notFim)
         {
-			times[index] = ler(nomeArquivo, times[index]);
-			index++;	
-		}
+			
+			times[fim % 5] = ler(nomeArquivo, times[fim%5]);
+			fim = ++fim % 5;
+			
+			if(fim == cabeca)
+				cabeca = ++cabeca % 5;
+			
+			soma_anos = 0;
+			quantElementos = 0;
 
+			for(int i = cabeca % 5; i != fim % 5; i = ++i % 5)
+			{
+				printf("i = %d\n", i);
+				soma_anos += times[i]->fundacaoAno;
+				quantElementos++;
+			}
+			
+			printf("quant = %d\n", quantElementos);
+		
+			printf("Ano = %d\n", (int)((float)soma_anos/quantElementos));
+			
+			// Funcionando, nao mexe aqui pelamor de deus!!
+		}
     } while(notFim);
+/*	
+	 fim = --fim % 6;
+	 cabeca = --cabeca % 6;
 	
-	selectSort(times, 0, index);
+	printf("Cabeca:\n");
+	imprimir(times[cabeca]);
+	printf("Fim:\n");
+	imprimir(times[fim]);
+	
+	// Tudo acima disso funciona!
+	
+	int quantInstrucoes;
+	scanf("%d", &quantInstrucoes);
+	
+	char instrucao[100];
 
-	for(int i = 0; i < index; i++)
+	for(int i = 0; i < quantInstrucoes; i++)
 	{
-		imprimir(times[i]);	
+		scanf(" %[^\n]", instrucao);	
+		soma_anos = 0;
+		
+		
+		memset(instrucao, '\0', sizeof(instrucao));
 	}
-	
-	
+   	
+*/
 	return 0;
-}
-
-void selectSort(Time** times, int index, int tam)
-{
-	if(index == tam-1)
-	{
-		return;
-	}
-
-	int menor = index;
-	for(int i = index+1; i < tam; i++)
-	{
-		if(times[i]->paginaTam < times[menor]->paginaTam)
-		{
-			menor = i;
-		}
-	}
-
-	Time* aux = times[menor];
-	times[menor] = times[index];
-	times[index] = aux;
-
-	index++;
-	selectSort(times, index, tam);
 }
 
 void inserirPosicao(Time** times, char instrucao[100], int tam, int posicao)
