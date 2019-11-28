@@ -10,15 +10,8 @@ class Aquecimento
 			entrada = MyIO.readLine();
 			notFim = notFim(entrada); // Se string for diferente de FIM, a execucao continua
 			if(notFim)
-			{	
-				// Percorre toda string e conta a quantidade de maiusculas
-				for(int i = 0; i < entrada.length(); i++)
-				{
-					if(ehMaiuscula(entrada.charAt(i)))
-					{
-						quantMaiusculas += 1;
-					}
-				}
+			{
+				quantMaiusculas = contarMaiusculas(entrada);
 		
 				MyIO.println(quantMaiusculas);
 				quantMaiusculas = 0;
@@ -28,16 +21,20 @@ class Aquecimento
 	
 	
 	/* 
-	 * Pega o valor decimal de cada caractere e avalia se eh maiusculo. Se for, retorna True
+	 * Pega o valor decimal de cada caractere e avalia se eh maiusculo. Se for, soma 1 na variavel quantMaiusculas.
+	 * Retorna o valor de quantMaiusculas
 	 */
-  	public static boolean ehMaiuscula(char letra)
+  	public static int contarMaiusculas(String entrada)
 	{
-		boolean ehMaiuscula = false;
-		if( (int)letra >= 65 && (int)letra <= 90)
-		{
-			ehMaiuscula = true;
-		}
-		return ehMaiuscula;	
+		int quantMaiusculas = 0;
+	
+		// Se o char for maior entre A e Z, aumenta em 1 a quantidade de maiusculas
+		for(int i = 0; i < entrada.length(); i++)
+			if( (int)entrada.charAt(i) >= 65 && (int)entrada.charAt(i) <= 90)
+				quantMaiusculas++;
+
+
+		return quantMaiusculas;	
 	}
 	
 	/*
