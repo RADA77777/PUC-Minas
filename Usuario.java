@@ -105,4 +105,16 @@ public class Usuario
 		set_email(entrada.readUTF());
 		set_senha(entrada.readUTF());
 	}
+
+	public void print_user()
+	{
+		if(this.get_id() == -1)
+			System.out.println("Esse usuario nao foi iniciado corretamente! Confira os dados da busca!\n");
+
+		System.out.println( "ID... " + this.get_id() + 
+							"\nNome... " + this.get_nome() + 
+							"\nEmail... " + this.get_email() + 
+							"\nSenha... " + this.get_senha()
+							);
+	}
 }

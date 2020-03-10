@@ -83,6 +83,9 @@ public class CRUD
 
 			HashExtensivel he = new HashExtensivel(4, "diretorio.hash.db", "cestos.hash.db");
 			he.create(last_inserted_id, address);
+
+			ArvoreBMais_String_Int arvore = new ArvoreBMais_String_Int(10, "./dados/index_indireto.db");
+			arvore.create(new_user.get_email(), new_user.get_id());
 		}
 		catch(Exception error)
 		{
@@ -93,13 +96,18 @@ public class CRUD
 	}
 
 	// TODO: Funcao read
-	public void read()
+	public Usuario read(int search_id)
 	{
+		Usuario user = new Usuario();
+
 		try
 		{
 			open_db_file();
 			
-			db_file.seek(4);
+			HashExtensivel he = new HashExtensivel(4, "diretorio.hash.db", "cestos.hash.db");
+			long id_location = he.read(search_id);
+
+			db_file.seek(id_location);
 			char is_lapide = db_file.readChar();
 			if(is_lapide == ' ')
 			{
@@ -109,7 +117,10 @@ public class CRUD
 				String email = db_file.readUTF();
 				String senha = db_file.readUTF();
 
-				System.out.println("id = " + id + " nome = " + nome + " email = " + email + " senha = " + senha);
+				user.set_id(id);
+				user.set_nome(nome);
+				user.set_email(email);
+				user.set_senha(senha);
 			}
 
 			close_db_file();
@@ -119,6 +130,27 @@ public class CRUD
 		{
 			System.out.println("Erro na funcao read. Erro: " + error);
 		}
+
+		return user;
+	}
+
+
+	public Usuario read(String search_email)
+	{
+		Usuario user = new Usuario();
+		try
+		{
+			ArvoreBMais_String_Int arvore = new ArvoreBMais_String_Int(10, "./dados/index_indireto.db");
+			int user_id = arvore.read(search_email);
+
+			user = read(user_id);
+		}
+		catch(Exception error)
+		{
+			System.out.println(error);
+		}
+
+		return user;
 	}
 
 
