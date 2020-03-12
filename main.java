@@ -7,7 +7,7 @@ public class main
 		Usuario u = crud.read("email@email");
 		u.print_user();
 		
-		u = crud.read(3);
+		u = crud.read(-1);
 		u.print_user();
 	}
 }

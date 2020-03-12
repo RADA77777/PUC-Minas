@@ -153,6 +153,25 @@ public class CRUD
 		return user;
 	}
 
+	public int update(int id)
+	{
+		try
+		{
+			open_db_file();
+
+			HashExtensivel he = new HashExtensivel(4, "diretorio.hash.db", "cestos.hash.db");
+			long id_location = he.read(search_id);
+
+			db_file.seek(id_location);
+			Usuario user = Usuario(id);
+			
+			close_db_file();
+		}
+		catch(Exception error)
+		{
+			System.out.println(error);
+		}
+	}
 
 	public void open_db_file()
 	{

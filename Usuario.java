@@ -109,7 +109,10 @@ public class Usuario
 	public void print_user()
 	{
 		if(this.get_id() == -1)
+		{
 			System.out.println("Esse usuario nao foi iniciado corretamente! Confira os dados da busca!\n");
+			return;
+		}
 
 		System.out.println( "ID... " + this.get_id() + 
 							"\nNome... " + this.get_nome() + 
