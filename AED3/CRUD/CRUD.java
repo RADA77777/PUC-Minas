@@ -34,8 +34,6 @@ public class CRUD
 		close_db_file();
 	}
 	
-
-	// TODO Armazenar nos indices direto e indireto
 	public int create()
 	{
 		try
@@ -46,22 +44,10 @@ public class CRUD
 			
 			rewrite_last_inserted_id();
 
-			//try
-			//{
-			
 			long address = db_file.length();
 			db_file.seek(address);
 
-			//}
-			//catch(IOException error)
-			//{
-			//	logger.log(Level.WARNING, "Nao consegui ir para o final do arquivo... Erro: " + error);
-			//}
-
-
 			logger.info("Escrevendo novo usuario em dados.db ---- email = " + new_user.get_email() + "\n");
-			//try	
-			//{
 			
 			byte[] user_in_bytes = new_user.to_byte_array();
 			int user_size_bytes = user_in_bytes.length;
@@ -69,13 +55,6 @@ public class CRUD
 			this.db_file.writeChar(' ');
 			this.db_file.writeInt(user_size_bytes);
 			this.db_file.write(user_in_bytes);
-
-			//}
-			//catch(IOException error)
-			//{
-			//	logger.log(Level.WARNING, "Nao consegui escrever info do usuario no arquivo. Erro: " + error);
-			//}
-
 			
 
 			logger.info("Novo usuario escrito com sucesso!\n");
@@ -95,7 +74,7 @@ public class CRUD
 		return this.last_inserted_id;
 	}
 
-	// TODO: Funcao read
+
 	public Usuario read(int search_id)
 	{
 		Usuario user = new Usuario();
@@ -135,6 +114,7 @@ public class CRUD
 	}
 
 
+
 	public Usuario read(String search_email)
 	{
 		Usuario user = new Usuario();
@@ -153,24 +133,108 @@ public class CRUD
 		return user;
 	}
 
-	public int update(int id)
+
+	public int update(int update_id)
 	{
 		try
 		{
 			open_db_file();
 
 			HashExtensivel he = new HashExtensivel(4, "diretorio.hash.db", "cestos.hash.db");
-			long id_location = he.read(search_id);
+			long id_location = he.read(update_id);
 
 			db_file.seek(id_location);
-			Usuario user = Usuario(id);
-			
+
+			Usuario new_user = new Usuario(update_id);
+			char is_lapide = db_file.readChar();
+
+			byte[] new_user_in_bytes = new_user.to_byte_array();
+
+			if(is_lapide == ' ')
+			{
+				int tam = db_file.readInt();
+				if(new_user_in_bytes.length <= tam)
+				{
+					db_file.seek(id_location + 2);
+					db_file.writeInt(new_user_in_bytes.length);
+					db_file.write(new_user_in_bytes);
+				}
+				else
+				{
+					db_file.seek(id_location);
+					db_file.writeChar('*');
+
+					long new_id_location = db_file.length();
+					
+					db_file.seek(new_id_location);
+					db_file.writeChar(' ');
+					db_file.writeInt(new_user_in_bytes.length);
+					db_file.write(new_user_in_bytes);
+
+					he.update(update_id, new_id_location);
+					ArvoreBMais_String_Int arvore = new ArvoreBMais_String_Int(10, "./dados/index_indireto.db");
+					arvore.update(new_user.get_email(), new_user.get_id());
+				}
+			}
+
 			close_db_file();
 		}
 		catch(Exception error)
 		{
 			System.out.println(error);
 		}
+
+		return update_id;
+	}
+
+
+	int update(String update_email)
+	{
+		int update_id = -1;
+		try
+		{
+			ArvoreBMais_String_Int arvore = new ArvoreBMais_String_Int(10, "./dados/index_indireto.db");
+			update_id = arvore.read(update_email);
+			update(update_id);
+		}
+		catch(Exception error)
+		{
+			error.printStackTrace();
+		}
+		return update_id;
+	}
+
+
+	int delete(int delete_id)
+	{
+		try
+		{
+			HashExtensivel he = new HashExtensivel(4, "diretorio.hash.db", "cestos.hash.db");
+			long location_id  = he.read(delete_id);
+
+			open_db_file();
+			
+			db_file.seek(location_id);
+			db_file.writeChar('*');
+			int len = db_file.readInt();
+			byte[] deleted_user_in_bytes = new byte[len];
+
+			db_file.read(deleted_user_in_bytes);
+
+			Usuario deleted_user = new Usuario();
+			deleted_user.from_byte_array(deleted_user_in_bytes);
+
+			he.delete(delete_id);
+			ArvoreBMais_String_Int arvore = new ArvoreBMais_String_Int(10, "./dados/index_indireto.db");
+			arvore.delete(deleted_user.get_email());
+
+			close_db_file();
+		}
+		catch(Exception error)
+		{
+			error.printStackTrace();
+		}
+		return delete_id;
 	}
 
 	public void open_db_file()
