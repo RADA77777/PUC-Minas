@@ -1,11 +1,13 @@
 import java.io.*;
+import java.lang.reflect.Constructor;
 import java.util.Scanner;
  
-public class Usuario
+public class Usuario implements Generic
 {
 	private int id;
 	private String nome, email, senha;
 	Scanner in =  new Scanner(System.in);
+
 
 	Usuario(int new_id, String new_nome, String new_email, String new_senha)
 	{

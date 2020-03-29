@@ -4,7 +4,7 @@ public class main
 {
 	public static void main(String[] args)
 	{
-		CRUD crud = new CRUD();
+		CRUD<Usuario> crud = new CRUD<>();
 
 		Scanner in = new Scanner(System.in);
 		boolean flag = true;
@@ -48,13 +48,13 @@ public class main
 		
 	}
 
-	public static void select_create(CRUD crud)
+	public static void select_create(CRUD<Usuario> crud)
 	{
 		crud.create();
 	}
 
 
-	public static void select_read(CRUD crud, Scanner in)
+	public static void select_read(CRUD<Usuario> crud, Scanner in)
 	{
 		System.out.println("Bem vindo ao menu de busca!");
 		
@@ -95,7 +95,7 @@ public class main
 	}
 
 
-	public static void select_update(CRUD crud, Scanner in)
+	public static void select_update(CRUD<Usuario> crud, Scanner in)
 	{
 		System.out.println("Bem vindo ao menu de atualizacao!");
 
@@ -129,7 +129,7 @@ public class main
 		}
 	}
 
-	public static void select_delete(CRUD crud, Scanner in)
+	public static void select_delete(CRUD<Usuario> crud, Scanner in)
 	{
 		System.out.println("Bem vindo ao menu de remocao de usuarios!");
 		System.out.println("Digite o ID do usuario a ser deletado... ");

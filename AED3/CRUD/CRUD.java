@@ -1,11 +1,18 @@
 import java.io.*;
+import java.lang.reflect.Constructor;
 import java.util.logging.*;
 
-public class CRUD
+public class CRUD<Template extends Generic>
 {
 	final Logger logger = Logger.getLogger(CRUD.class.getName());
 	public int last_inserted_id;
 	RandomAccessFile db_file;
+	
+	Constructor<Template> constructor;
+	public CRUD(Constructor<Template> constructor)
+	{
+		this.constructor = constructor;
+	}
 
 	CRUD()
 	{
@@ -41,7 +48,10 @@ public class CRUD
 		{
 			open_db_file();
 			
-			Usuario new_user = new Usuario(++this.last_inserted_id);
+			System.out.println("CHEGUEI AQUI");
+			
+			// TODO consertar codigo do prof
+			Template new_user = this.constructor.newInstance(++this.last_inserted_id);
 			
 			return_value = this.last_inserted_id;
 
@@ -72,18 +82,19 @@ public class CRUD
 		catch(Exception error)
 		{
 			System.out.println("Erro na funcao create: " + error);
+			error.printStackTrace();
 		}
 
 		return return_value;
 	}
 
 
-	public Usuario read(int search_id)
+	public Template read(int search_id)
 	{
-		Usuario user = new Usuario();
-
+		Template read_user;
 		try
 		{
+			read_user = this.constructor.newInstance();
 			open_db_file();
 			
 			HashExtensivel he = new HashExtensivel(4, "diretorio.hash.db", "cestos.hash.db");
@@ -96,7 +107,7 @@ public class CRUD
 				byte[] user_in_bytes = new byte[db_file.readInt()];
 				db_file.read(user_in_bytes);
 				
-				user.from_byte_array(user_in_bytes);
+				read_user.from_byte_array(user_in_bytes);
 			}
 
 			close_db_file();
@@ -105,35 +116,37 @@ public class CRUD
 		catch(Exception error)
 		{
 			System.out.println("Erro na funcao read. Erro: " + error);
-			user = null;
+			read_user = null;
 		}
 
-		return user;
+		return read_user;
 	}
 
 
 
-	public Usuario read(String search_email)
+	public Template read(String search_email)
 	{
-		Usuario user = new Usuario();
+		Template read_user;
 		try
 		{
+			read_user = this.constructor.newInstance();
 			ArvoreBMais_String_Int arvore = new ArvoreBMais_String_Int(10, "./dados/index_indireto.db");
 			int user_id = arvore.read(search_email);
 
-			user = read(user_id);
+			read_user = read(user_id);
 		}
 		catch(Exception error)
 		{
 			System.out.println(error);
-			user = null;
+			read_user = null;
 		}
 
-		return user;
+		return read_user;
 	}
 
 	public int update(int update_id)
 	{
+		Template new_user;
 		try
 		{
 			open_db_file();
@@ -143,7 +156,7 @@ public class CRUD
 
 			db_file.seek(id_location);
 
-			Usuario new_user = new Usuario(update_id);
+			new_user = this.constructor.newInstance(update_id);
 			char is_lapide = db_file.readChar();
 
 			byte[] new_user_in_bytes = new_user.to_byte_array();
@@ -219,7 +232,7 @@ public class CRUD
 
 			db_file.read(deleted_user_in_bytes);
 
-			Usuario deleted_user = new Usuario();
+			Template deleted_user = this.constructor.newInstance();
 			deleted_user.from_byte_array(deleted_user_in_bytes);
 
 			he.delete(delete_id);
