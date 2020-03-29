@@ -5,30 +5,137 @@ public class main
 	public static void main(String[] args)
 	{
 		CRUD crud = new CRUD();
-		Usuario u = new Usuario();
 
-		menu();
 		Scanner in = new Scanner(System.in);
+		boolean flag = true;
 
-		
-		int selection = in.nextInt();
-		
-		switch(selection)
+		while(flag)
 		{
-			case 1: crud.create();
-			case 2: crud.read();
-			case 3: crud.update();
-			case 4: crud.delete();
+			menu();
+
+			
+			int selection = in.nextInt();
+			while(selection < 0 || selection > 4)
+			{
+				System.out.println("Selecao nao valida");
+				menu();
+				selection = in.nextInt();
+			}
+
+			switch(selection)
+			{
+				case 1: select_create(crud);  break;
+				case 2: select_read(crud, in);    break;
+				case 3: select_update(crud, in);  break;
+				case 4: select_delete(crud, in);  break;
+				case 0: flag = false;
+			}
+			System.out.println("\n\n");
 		}
+		in.close();
+		
 	}
 
+	
 	public static void menu()
 	{
 		System.out.println("Digite... [1] para criar novo usuario\n" +
 						   "\t  [2] para pesquisar um usuario\n" +
 						   "\t  [3] para atualizar informacoes de um usuario\n" +
-						   "\t  [4] para deletar um usuario\n"
+						   "\t  [4] para deletar um usuario\n" +
+						   "\t  [0] para sair"
 						   );
 		
+	}
+
+	public static void select_create(CRUD crud)
+	{
+		crud.create();
+	}
+
+
+	public static void select_read(CRUD crud, Scanner in)
+	{
+		System.out.println("Bem vindo ao menu de busca!");
+		
+		System.out.println("Digite... [1] para buscar por ID\n" +
+						   "\t  [2] para buscar por e-mail"
+							);
+
+		int search_option = in.nextInt();
+
+		while(search_option < 1 || search_option > 2)
+		{
+			System.out.println("Selecao invalida.");
+
+			System.out.println("Digite... [1] para buscar por ID\n" +
+							   "\t  [2] para buscar por e-mail"
+		 					   );
+		}
+
+		Usuario searched_user = new Usuario();
+
+		if(search_option == 1)
+		{
+			System.out.println("Digite o ID a ser buscado");
+			int search_id = in.nextInt();
+			searched_user = crud.read(search_id);
+		}
+		else if(search_option == 2)
+		{
+			System.out.println("Digite o email para busca");
+			String search_email = in.next();
+			searched_user = crud.read(search_email);
+		}
+
+		if(searched_user == null)
+			System.out.println("Nao foi possivel encontrar esse usuario!");
+		else
+			searched_user.print_user();
+	}
+
+
+	public static void select_update(CRUD crud, Scanner in)
+	{
+		System.out.println("Bem vindo ao menu de atualizacao!");
+
+		System.out.println("Digite... [1] para atualizar por ID\n" +
+						   "\t  [2] para atualizar por e-mail"
+							);
+
+		int search_option = in.nextInt();
+
+		while(search_option < 1 || search_option > 2)
+		{
+			System.out.println("Selecao invalida.");
+
+			System.out.println("Digite... [1] para atualizar por ID\n" +
+							   "\t  [2] para atualizar por e-mail"
+		 					   );
+		}
+
+		if(search_option == 1)
+		{
+			System.out.println("Digite o ID a ser atualizado");
+			int update_id = in.nextInt();
+			System.out.println(update_id);
+			crud.update(update_id);
+		}
+		else if(search_option == 2)
+		{
+			System.out.println("Digite o email para atualizacao");
+			String update_email = in.next();
+			crud.update(update_email);
+		}
+	}
+
+	public static void select_delete(CRUD crud, Scanner in)
+	{
+		System.out.println("Bem vindo ao menu de remocao de usuarios!");
+		System.out.println("Digite o ID do usuario a ser deletado... ");
+
+		int delete_id = in.nextInt();
+
+		crud.delete(delete_id);
 	}
 }

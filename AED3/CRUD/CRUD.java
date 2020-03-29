@@ -36,18 +36,21 @@ public class CRUD
 	
 	public int create()
 	{
+		int return_value = -1;
 		try
 		{
 			open_db_file();
 			
 			Usuario new_user = new Usuario(++this.last_inserted_id);
 			
+			return_value = this.last_inserted_id;
+
 			rewrite_last_inserted_id();
 
 			long address = db_file.length();
 			db_file.seek(address);
 
-			logger.info("Escrevendo novo usuario em dados.db ---- email = " + new_user.get_email() + "\n");
+			logger.info("Escrevendo novo usuario em dados.db\n#email = " + new_user.get_email() + "\n#ID = " + new_user.get_id() + "\n");
 			
 			byte[] user_in_bytes = new_user.to_byte_array();
 			int user_size_bytes = user_in_bytes.length;
@@ -71,7 +74,7 @@ public class CRUD
 			System.out.println("Erro na funcao create: " + error);
 		}
 
-		return this.last_inserted_id;
+		return return_value;
 	}
 
 
@@ -90,16 +93,10 @@ public class CRUD
 			char is_lapide = db_file.readChar();
 			if(is_lapide == ' ')
 			{
-				db_file.readInt();
-				int id = db_file.readInt();
-				String nome = db_file.readUTF();
-				String email = db_file.readUTF();
-				String senha = db_file.readUTF();
-
-				user.set_id(id);
-				user.set_nome(nome);
-				user.set_email(email);
-				user.set_senha(senha);
+				byte[] user_in_bytes = new byte[db_file.readInt()];
+				db_file.read(user_in_bytes);
+				
+				user.from_byte_array(user_in_bytes);
 			}
 
 			close_db_file();
@@ -108,6 +105,7 @@ public class CRUD
 		catch(Exception error)
 		{
 			System.out.println("Erro na funcao read. Erro: " + error);
+			user = null;
 		}
 
 		return user;
@@ -128,11 +126,11 @@ public class CRUD
 		catch(Exception error)
 		{
 			System.out.println(error);
+			user = null;
 		}
 
 		return user;
 	}
-
 
 	public int update(int update_id)
 	{

@@ -114,8 +114,8 @@ public class Usuario
 			return;
 		}
 
-		System.out.println( "ID... " + this.get_id() + 
-							"\nNome... " + this.get_nome() + 
+		System.out.println( "ID... " + this.get_id()         + 
+							"\nNome... " + this.get_nome()   + 
 							"\nEmail... " + this.get_email() + 
 							"\nSenha... " + this.get_senha()
 							);
