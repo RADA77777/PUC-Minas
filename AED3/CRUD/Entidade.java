@@ -1,4 +1,4 @@
-public interface Generic
+public interface Entidade
 {
     public int get_id();
 	public void set_id(int new_id);
@@ -16,5 +16,8 @@ public interface Generic
 
     public byte[] to_byte_array() throws java.io.IOException;
 	public void from_byte_array(byte[] bytes) throws java.io.IOException;
-	public void print_user();
+	
+	public void set_info(int some_int);
+	
+	public void print_entity();
 }

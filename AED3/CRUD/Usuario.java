@@ -1,43 +1,28 @@
 import java.io.*;
-import java.lang.reflect.Constructor;
 import java.util.Scanner;
  
-public class Usuario implements Generic
+public class Usuario implements Entidade
 {
 	private int id;
 	private String nome, email, senha;
-	Scanner in =  new Scanner(System.in);
 
-
-	Usuario(int new_id, String new_nome, String new_email, String new_senha)
+	public void set_info(int id)
 	{
-		set_id(new_id);
-		set_nome(new_nome);
-		set_email(new_email);
-		set_senha(new_senha);
+		Scanner in =  new Scanner(System.in);
+		this.set_id(id);
+
+		System.out.println("Digite seu nome: ");
+		String nome  = in.nextLine();
+		this.set_nome(nome);
+
+		System.out.println("Digite seu email: ");
+		String email = in.nextLine();
+		this.set_email(email);
+
+		System.out.println("Digite sua senha: ");
+		String senha = in.nextLine();
+		this.set_senha(senha);
 	}
-
-	Usuario(int new_id)
-	{
-		set_id(new_id);
-		
-		System.out.println("\nNome: ");
-		set_nome(in.nextLine());
-		
-		System.out.println("\nEmail: ");
-		set_email(in.nextLine());
-
-		System.out.println("\nSenha: ");
-		set_senha(in.nextLine());
-	}
-
-	Usuario()
-	{
-		set_id(-1);
-		set_nome("-1");
-		set_email("-1");
-		set_senha("-1");
-	}	
 
 	public int get_id()
 	{
@@ -108,14 +93,8 @@ public class Usuario implements Generic
 		set_senha(entrada.readUTF());
 	}
 
-	public void print_user()
+	public void print_entity()
 	{
-		if(this.get_id() == -1)
-		{
-			System.out.println("Esse usuario nao foi iniciado corretamente! Confira os dados da busca!\n");
-			return;
-		}
-
 		System.out.println( "ID... " + this.get_id()         + 
 							"\nNome... " + this.get_nome()   + 
 							"\nEmail... " + this.get_email() + 

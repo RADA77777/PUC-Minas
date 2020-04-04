@@ -4,36 +4,40 @@ public class main
 {
 	public static void main(String[] args)
 	{
-		CRUD<Usuario> crud = new CRUD<>();
-
-		Scanner in = new Scanner(System.in);
-		boolean flag = true;
-
-		while(flag)
+		try
 		{
-			menu();
+			CRUD<Usuario> crud = new CRUD<>(Usuario.class.getConstructor());
+			Scanner in = new Scanner(System.in);
+			boolean flag = true;
 
-			
-			int selection = in.nextInt();
-			while(selection < 0 || selection > 4)
+			while(flag)
 			{
-				System.out.println("Selecao nao valida");
 				menu();
-				selection = in.nextInt();
-			}
 
-			switch(selection)
-			{
-				case 1: select_create(crud);  break;
-				case 2: select_read(crud, in);    break;
-				case 3: select_update(crud, in);  break;
-				case 4: select_delete(crud, in);  break;
-				case 0: flag = false;
+				int selection = in.nextInt();
+				while(selection < 0 || selection > 4)
+				{
+					System.out.println("Selecao nao valida");
+					menu();
+					selection = in.nextInt();
+				}
+
+				switch(selection)
+				{
+					case 1: select_create(crud, in);  break;
+					case 2: select_read(crud, in);    break;
+					case 3: select_update(crud, in);  break;
+					case 4: select_delete(crud, in);  break;
+					case 0: flag = false;
+				}
+				System.out.println("\n\n");
 			}
-			System.out.println("\n\n");
+			in.close();
 		}
-		in.close();
-		
+		catch(Exception error)
+		{
+			error.printStackTrace();
+		}
 	}
 
 	
@@ -41,20 +45,22 @@ public class main
 	{
 		System.out.println("Digite... [1] para criar novo usuario\n" +
 						   "\t  [2] para pesquisar um usuario\n" +
-						   "\t  [3] para atualizar informacoes de um usuario\n" +
+						   "\t  [3] para atualizar inputformacoes de um usuario\n" +
 						   "\t  [4] para deletar um usuario\n" +
 						   "\t  [0] para sair"
 						   );
 		
 	}
 
-	public static void select_create(CRUD<Usuario> crud)
+	public static void select_create(CRUD<Usuario> crud, Scanner input)
 	{
+		System.out.println("Bem vindo ao menu de criacao de usuarios!");
+
 		crud.create();
 	}
 
 
-	public static void select_read(CRUD<Usuario> crud, Scanner in)
+	public static void select_read(CRUD<Usuario> crud, Scanner input)
 	{
 		System.out.println("Bem vindo ao menu de busca!");
 		
@@ -62,7 +68,7 @@ public class main
 						   "\t  [2] para buscar por e-mail"
 							);
 
-		int search_option = in.nextInt();
+		int search_option = input.nextInt();
 
 		while(search_option < 1 || search_option > 2)
 		{
@@ -78,24 +84,24 @@ public class main
 		if(search_option == 1)
 		{
 			System.out.println("Digite o ID a ser buscado");
-			int search_id = in.nextInt();
+			int search_id = input.nextInt();
 			searched_user = crud.read(search_id);
 		}
 		else if(search_option == 2)
 		{
 			System.out.println("Digite o email para busca");
-			String search_email = in.next();
+			String search_email = input.next();
 			searched_user = crud.read(search_email);
 		}
 
 		if(searched_user == null)
 			System.out.println("Nao foi possivel encontrar esse usuario!");
 		else
-			searched_user.print_user();
+			searched_user.print_entity();
 	}
 
 
-	public static void select_update(CRUD<Usuario> crud, Scanner in)
+	public static void select_update(CRUD<Usuario> crud, Scanner input)
 	{
 		System.out.println("Bem vindo ao menu de atualizacao!");
 
@@ -103,7 +109,7 @@ public class main
 						   "\t  [2] para atualizar por e-mail"
 							);
 
-		int search_option = in.nextInt();
+		int search_option = input.nextInt();
 
 		while(search_option < 1 || search_option > 2)
 		{
@@ -117,24 +123,24 @@ public class main
 		if(search_option == 1)
 		{
 			System.out.println("Digite o ID a ser atualizado");
-			int update_id = in.nextInt();
+			int update_id = input.nextInt();
 			System.out.println(update_id);
 			crud.update(update_id);
 		}
 		else if(search_option == 2)
 		{
 			System.out.println("Digite o email para atualizacao");
-			String update_email = in.next();
+			String update_email = input.next();
 			crud.update(update_email);
 		}
 	}
 
-	public static void select_delete(CRUD<Usuario> crud, Scanner in)
+	public static void select_delete(CRUD<Usuario> crud, Scanner input)
 	{
 		System.out.println("Bem vindo ao menu de remocao de usuarios!");
 		System.out.println("Digite o ID do usuario a ser deletado... ");
 
-		int delete_id = in.nextInt();
+		int delete_id = input.nextInt();
 
 		crud.delete(delete_id);
 	}

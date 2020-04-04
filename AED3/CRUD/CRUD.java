@@ -2,30 +2,31 @@ import java.io.*;
 import java.lang.reflect.Constructor;
 import java.util.logging.*;
 
-public class CRUD<Template extends Generic>
+// Implementacao generica do CRUD. Pode ser aplicado a qualquer tipo, desde que
+// o tipo implemente a classe Entidade
+public class CRUD<Template extends Entidade>
 {
 	final Logger logger = Logger.getLogger(CRUD.class.getName());
 	public int last_inserted_id;
 	RandomAccessFile db_file;
-	
 	Constructor<Template> constructor;
+
 	public CRUD(Constructor<Template> constructor)
 	{
 		this.constructor = constructor;
-	}
 
-	CRUD()
-	{
 		logger.info("Abrindo o arquivo ./dados/dados.db\n");
 		// Tentando abrir arquivo pela primeira vez
 		open_db_file();
 		
 		// Caso aberto, ler o 1 numero, que indica o ultimo ID usado
-		try{
+		try
+		{
 			this.last_inserted_id = this.db_file.readInt();
 			logger.info("Ultimo id inserido = " + this.last_inserted_id);
 		}
-		catch(IOException error){
+		catch(IOException error)
+		{
 			logger.info("Nada escrito no arquivo... Colocando ID inicial como 0...\n");
 			// Se nao retornar IOException, eh pq nao tem nada escrito. Logo, escrevemos 0 nele
 			try{
@@ -40,22 +41,18 @@ public class CRUD<Template extends Generic>
 
 		close_db_file();
 	}
-	
+
+
 	public int create()
 	{
 		int return_value = -1;
 		try
 		{
 			open_db_file();
-			
-			System.out.println("CHEGUEI AQUI");
-			
-			// TODO consertar codigo do prof
-			Template new_user = this.constructor.newInstance(++this.last_inserted_id);
-			
-			return_value = this.last_inserted_id;
-
 			rewrite_last_inserted_id();
+
+			Template new_user = this.constructor.newInstance();
+			new_user.set_info(this.last_inserted_id);
 
 			long address = db_file.length();
 			db_file.seek(address);
@@ -63,13 +60,11 @@ public class CRUD<Template extends Generic>
 			logger.info("Escrevendo novo usuario em dados.db\n#email = " + new_user.get_email() + "\n#ID = " + new_user.get_id() + "\n");
 			
 			byte[] user_in_bytes = new_user.to_byte_array();
-			int user_size_bytes = user_in_bytes.length;
 			
 			this.db_file.writeChar(' ');
-			this.db_file.writeInt(user_size_bytes);
+			this.db_file.writeInt(user_in_bytes.length);
 			this.db_file.write(user_in_bytes);
 			
-
 			logger.info("Novo usuario escrito com sucesso!\n");
 			close_db_file();
 
@@ -78,6 +73,8 @@ public class CRUD<Template extends Generic>
 
 			ArvoreBMais_String_Int arvore = new ArvoreBMais_String_Int(10, "./dados/index_indireto.db");
 			arvore.create(new_user.get_email(), new_user.get_id());
+
+			return_value = this.last_inserted_id;
 		}
 		catch(Exception error)
 		{
@@ -102,6 +99,7 @@ public class CRUD<Template extends Generic>
 
 			db_file.seek(id_location);
 			char is_lapide = db_file.readChar();
+
 			if(is_lapide == ' ')
 			{
 				byte[] user_in_bytes = new byte[db_file.readInt()];
@@ -147,6 +145,7 @@ public class CRUD<Template extends Generic>
 	public int update(int update_id)
 	{
 		Template new_user;
+		int return_value = -1;
 		try
 		{
 			open_db_file();
@@ -156,7 +155,9 @@ public class CRUD<Template extends Generic>
 
 			db_file.seek(id_location);
 
-			new_user = this.constructor.newInstance(update_id);
+			new_user = this.constructor.newInstance();
+			new_user.set_info(update_id);
+
 			char is_lapide = db_file.readChar();
 
 			byte[] new_user_in_bytes = new_user.to_byte_array();
@@ -164,6 +165,7 @@ public class CRUD<Template extends Generic>
 			if(is_lapide == ' ')
 			{
 				int tam = db_file.readInt();
+				
 				if(new_user_in_bytes.length <= tam)
 				{
 					db_file.seek(id_location + 2);
@@ -187,15 +189,15 @@ public class CRUD<Template extends Generic>
 					arvore.update(new_user.get_email(), new_user.get_id());
 				}
 			}
-
 			close_db_file();
+			return_value = update_id;
 		}
 		catch(Exception error)
 		{
 			System.out.println(error);
 		}
 
-		return update_id;
+		return return_value;
 	}
 
 
@@ -226,15 +228,19 @@ public class CRUD<Template extends Generic>
 			open_db_file();
 			
 			db_file.seek(location_id);
+			
+			// Marcando como lapide
 			db_file.writeChar('*');
+
+			// Lendo o usuario no arquivo de dados para poder pegar o email dele. O email
+			// eh necessario para remover ele do indice indireto (arvore B+)
 			int len = db_file.readInt();
 			byte[] deleted_user_in_bytes = new byte[len];
-
 			db_file.read(deleted_user_in_bytes);
-
 			Template deleted_user = this.constructor.newInstance();
 			deleted_user.from_byte_array(deleted_user_in_bytes);
 
+			// Deletando informacao desse usuario dos indices direto (Hash Extensivel) e indireto (Arvore B+)
 			he.delete(delete_id);
 			ArvoreBMais_String_Int arvore = new ArvoreBMais_String_Int(10, "./dados/index_indireto.db");
 			arvore.delete(deleted_user.get_email());
@@ -247,6 +253,7 @@ public class CRUD<Template extends Generic>
 		}
 		return delete_id;
 	}
+
 
 	public void open_db_file()
 	{
@@ -275,7 +282,7 @@ public class CRUD<Template extends Generic>
 		try
 		{
 			db_file.seek(0);
-			db_file.writeInt(this.last_inserted_id);
+			db_file.writeInt(++this.last_inserted_id);
 		}
 		catch(IOException error)
 		{
