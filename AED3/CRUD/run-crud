@@ -2,6 +2,7 @@ if [ ! -d "dados" ]; then
 	mkdir dados
 fi
 
+javac Indice_Lapides.java
 javac main.java
 java main
 

@@ -45,7 +45,7 @@ public class main
 	{
 		System.out.println("Digite... [1] para criar novo usuario\n" +
 						   "\t  [2] para pesquisar um usuario\n" +
-						   "\t  [3] para atualizar inputformacoes de um usuario\n" +
+						   "\t  [3] para atualizar informacoes de um usuario\n" +
 						   "\t  [4] para deletar um usuario\n" +
 						   "\t  [0] para sair"
 						   );

@@ -6,8 +6,9 @@ import java.util.logging.*;
 // o tipo implemente a classe Entidade
 public class CRUD<Template extends Entidade>
 {
-	final Logger logger = Logger.getLogger(CRUD.class.getName());
+	Logger logger = Logger.getLogger(CRUD.class.getName());
 	public int last_inserted_id;
+	public int percentage_for_overwrite = 80;
 	RandomAccessFile db_file;
 	Constructor<Template> constructor;
 
@@ -29,7 +30,8 @@ public class CRUD<Template extends Entidade>
 		{
 			logger.info("Nada escrito no arquivo... Colocando ID inicial como 0...\n");
 			// Se nao retornar IOException, eh pq nao tem nada escrito. Logo, escrevemos 0 nele
-			try{
+			try
+			{
 				this.db_file.writeInt(-1);
 				this.last_inserted_id = -1;
 			}
@@ -43,6 +45,7 @@ public class CRUD<Template extends Entidade>
 	}
 
 
+	// Cria um usuario novo do zero e armazena suas informacoes em um arquivo chamado dados.db
 	public int create()
 	{
 		int return_value = -1;
@@ -53,24 +56,49 @@ public class CRUD<Template extends Entidade>
 
 			Template new_user = this.constructor.newInstance();
 			new_user.set_info(this.last_inserted_id);
+			byte[] user_in_bytes = new_user.to_byte_array();
 
-			long address = db_file.length();
-			db_file.seek(address);
+			// O Arquivo Espacos Livres eh um indice indireto sequencial denso que funciona em pares...
+			// Ele tem um par de longs: Um tamanho e um endereco. Esses longs indicam
+			// os usuarios marcados como lapide(*) no arquivo dados.db - O primeiro fala quantos bytes estao vazios, e
+			// o outro fala a posicao do inicio desses bytes em dados.db
+			Indice_Lapides arq_sequencial = new Indice_Lapides(percentage_for_overwrite);
+
+			// A funcao search_empty_space recebe um long - qual o tamanho do novo usuario em bytes - e procura
+			// em seu arquivo se existe algume espaco vazio (algum campo lapide) em dados.db que tenha esse mesmo
+			// tamanho ou que a sobreescrita gere, no minimo, <percentage_for_overwrite>% de ocupacao.
+			long empty_space_address = arq_sequencial.search_empty_space(user_in_bytes.length);
+			arq_sequencial.como_estas();
+
+			// A funcao retorna -1 caso nao tenham usuarios deletados (marcados como lapide)
+			// em dados.db. Nesse caso, a variavel so vai ser mudada para db_file.length(), para os dados
+			// serem inseridos no final do arquivo dados.db
+			if(empty_space_address == -1)
+				empty_space_address = db_file.length();
+			
+
+			db_file.seek(empty_space_address);
 
 			logger.info("Escrevendo novo usuario em dados.db\n#email = " + new_user.get_email() + "\n#ID = " + new_user.get_id() + "\n");
 			
-			byte[] user_in_bytes = new_user.to_byte_array();
 			
+			// Se o arquivo tiver um char ' ' na frente, significa que o campo é valido. Se o char for '*', o
+			// campo denomina uma lapide - Ja teve um arquivo ali antes, mas nao tem mais.
 			this.db_file.writeChar(' ');
 			this.db_file.writeInt(user_in_bytes.length);
+
 			this.db_file.write(user_in_bytes);
 			
 			logger.info("Novo usuario escrito com sucesso!\n");
 			close_db_file();
 
+			// HashExtensivel eh um indice direto que armazena um par de chaves. Muito parecido com o Arquvo_Espacos_Livres,
+			// esse arquivo armazena os pares ID - Local do ID em dados.db
 			HashExtensivel he = new HashExtensivel(4, "diretorio.hash.db", "cestos.hash.db");
-			he.create(last_inserted_id, address);
+			he.create(last_inserted_id, empty_space_address);
 
+			// A ArvoreBMais_String_Int armazena outro par de informacoes. Email - ID. Retornando o ID, pode-se jogar ele
+			// na HashExtensivel para obter o local no arquivo dados.db
 			ArvoreBMais_String_Int arvore = new ArvoreBMais_String_Int(10, "./dados/index_indireto.db");
 			arvore.create(new_user.get_email(), new_user.get_id());
 
@@ -86,11 +114,14 @@ public class CRUD<Template extends Entidade>
 	}
 
 
+	// A funcao read recebe um ID e realiza uma busca na tabela hash extensivel para obter a localizacao do
+	// registro de usuario em dados.db
 	public Template read(int search_id)
 	{
 		Template read_user;
 		try
 		{
+			// Como eh preciso retornar um usuario, eh preciso criar um novo
 			read_user = this.constructor.newInstance();
 			open_db_file();
 			
@@ -98,6 +129,8 @@ public class CRUD<Template extends Entidade>
 			long id_location = he.read(search_id);
 
 			db_file.seek(id_location);
+			
+			// Verificando se o campo eh uma lapide para saber se o usuario existe
 			char is_lapide = db_file.readChar();
 
 			if(is_lapide == ' ')
@@ -113,7 +146,6 @@ public class CRUD<Template extends Entidade>
 
 		catch(Exception error)
 		{
-			System.out.println("Erro na funcao read. Erro: " + error);
 			read_user = null;
 		}
 
@@ -122,6 +154,10 @@ public class CRUD<Template extends Entidade>
 
 
 
+	// Recebe um email ao inves de um indice. Esse tipo de busca nao muda muito.
+	// A unica diferenca eh que eh obtido o ID usando o indice indireto ArvoreBMais_String_Int, e
+	// depois esse ID eh jogado para a funcao read que recebe um int. Usuario eh retornado
+	// da mesma forma
 	public Template read(String search_email)
 	{
 		Template read_user;
@@ -142,6 +178,9 @@ public class CRUD<Template extends Entidade>
 		return read_user;
 	}
 
+
+	// Essa funcao recebe um int e usa ele para sobreescrever os dados de um usuario, caso ele seja achado.
+	// Se nao for executada corretamente, retorna -1. Caso contrario, retorna a ID do usuario
 	public int update(int update_id)
 	{
 		Template new_user;
@@ -155,36 +194,57 @@ public class CRUD<Template extends Entidade>
 
 			db_file.seek(id_location);
 
+			// Criando nova instancia de um objeto Usuario
 			new_user = this.constructor.newInstance();
 			new_user.set_info(update_id);
 
 			char is_lapide = db_file.readChar();
-
 			byte[] new_user_in_bytes = new_user.to_byte_array();
 
+			// Verificando novamente se o campo eh uma lapide, como medida de seguranca
 			if(is_lapide == ' ')
 			{
 				int tam = db_file.readInt();
 				
-				if(new_user_in_bytes.length <= tam)
+				// Se o tamanho da ocupacao ja for maior que <percentage_for_overwrite>, eh desnecessario
+				// fazer uma busca no indice de espacos vazios. Essa busca so vai ser feita se cair no else
+				if(( 100*new_user_in_bytes.length/tam >= percentage_for_overwrite) && (new_user_in_bytes.length <= tam) )
 				{
 					db_file.seek(id_location + 2);
 					db_file.writeInt(new_user_in_bytes.length);
 					db_file.write(new_user_in_bytes);
 				}
 				else
-				{
+				{		
 					db_file.seek(id_location);
 					db_file.writeChar('*');
 
-					long new_id_location = db_file.length();
-					
-					db_file.seek(new_id_location);
+					// Procurando por espacos vazios. Se a funcao retornar -1, eh pq nao existem espacos 
+					// vazios, logo, o novo usuario vai ser inserido no final de dados.db. Caso contrario, vai
+					// ser inserido no espaco retornado por essa funcao
+					Indice_Lapides arq = new Indice_Lapides(percentage_for_overwrite);
+					long address = arq.search_empty_space(new_user_in_bytes.length);
+					if(address == -1)
+					{
+						long new_id_location = db_file.length();
+						db_file.seek(new_id_location);
+						he.update(update_id, new_id_location);
+
+						arq.create_entry_grave((long)tam, id_location);
+					}
+					else
+					{
+						db_file.seek(address);
+						he.update(update_id, address);
+					}
+
+					// Escrevendo usuario no arquivo
 					db_file.writeChar(' ');
 					db_file.writeInt(new_user_in_bytes.length);
 					db_file.write(new_user_in_bytes);
 
-					he.update(update_id, new_id_location);
+					arq.como_estas();
+
 					ArvoreBMais_String_Int arvore = new ArvoreBMais_String_Int(10, "./dados/index_indireto.db");
 					arvore.update(new_user.get_email(), new_user.get_id());
 				}
@@ -194,13 +254,15 @@ public class CRUD<Template extends Entidade>
 		}
 		catch(Exception error)
 		{
-			System.out.println(error);
+			System.out.println("Nao foi possivel atualizar informacoes desse usuario. Tem certeza de que ele existe?");
 		}
 
 		return return_value;
 	}
 
 
+	// Mesma ideia da funcao read... Buscar o ID no indice indireto ArvoreBMais e 
+	// chamar a funcao update usando o ID
 	int update(String update_email)
 	{
 		int update_id = -1;
@@ -218,6 +280,9 @@ public class CRUD<Template extends Entidade>
 	}
 
 
+	// Recebe um ID e deleta ele do arquivo dados.db
+	// Essa funcao tambem eh responsavel por criar entradas no indice indireto de
+	// espacos vazios.
 	int delete(int delete_id)
 	{
 		try
@@ -229,7 +294,7 @@ public class CRUD<Template extends Entidade>
 			
 			db_file.seek(location_id);
 			
-			// Marcando como lapide
+			// Marcando usuario como lapide em dados.db
 			db_file.writeChar('*');
 
 			// Lendo o usuario no arquivo de dados para poder pegar o email dele. O email
@@ -237,6 +302,7 @@ public class CRUD<Template extends Entidade>
 			int len = db_file.readInt();
 			byte[] deleted_user_in_bytes = new byte[len];
 			db_file.read(deleted_user_in_bytes);
+
 			Template deleted_user = this.constructor.newInstance();
 			deleted_user.from_byte_array(deleted_user_in_bytes);
 
@@ -244,6 +310,13 @@ public class CRUD<Template extends Entidade>
 			he.delete(delete_id);
 			ArvoreBMais_String_Int arvore = new ArvoreBMais_String_Int(10, "./dados/index_indireto.db");
 			arvore.delete(deleted_user.get_email());
+
+			// Indicando para o indice de lapides que um usuario foi deletado de dados.db
+			// Com a chamada da funcao create_entry_grave, o indice de lapides vai armazenar o 
+			// tamanho da nova lapide, e tambem a sua localizacao
+			Indice_Lapides arq = new Indice_Lapides(percentage_for_overwrite);
+			arq.create_entry_grave((long)len, location_id);
+			arq.como_estas();
 
 			close_db_file();
 		}

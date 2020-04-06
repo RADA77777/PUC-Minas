@@ -95,8 +95,8 @@ public class Usuario implements Entidade
 
 	public void print_entity()
 	{
-		System.out.println( "ID... " + this.get_id()         + 
-							"\nNome... " + this.get_nome()   + 
+		System.out.println( "ID........ " + this.get_id()    + 
+						    "\nNome.... " + this.get_nome()  + 
 							"\nEmail... " + this.get_email() + 
 							"\nSenha... " + this.get_senha()
 							);
