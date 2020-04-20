@@ -7,9 +7,9 @@ public class main
 		try
 		{
 			CRUD<Usuario> crud = new CRUD<>(Usuario.class.getConstructor());
-			Scanner in = new Scanner(System.in);
-			boolean flag = true;
 
+			Interface_Crud.menu_inicial(crud);
+			/*
 			while(flag)
 			{
 				menu();
@@ -33,11 +33,15 @@ public class main
 				System.out.println("\n\n");
 			}
 			in.close();
+		*/
 		}
 		catch(Exception error)
 		{
 			error.printStackTrace();
 		}
+	}
+}
+		/*
 	}
 
 	
@@ -143,5 +147,4 @@ public class main
 		int delete_id = input.nextInt();
 
 		crud.delete(delete_id);
-	}
-}
+	}*/

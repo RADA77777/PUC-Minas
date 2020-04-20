@@ -1,12 +1,10 @@
 import java.io.*;
 import java.lang.reflect.Constructor;
-import java.util.logging.*;
 
 // Implementacao generica do CRUD. Pode ser aplicado a qualquer tipo, desde que
 // o tipo implemente a classe Entidade
 public class CRUD<Template extends Entidade>
 {
-	Logger logger = Logger.getLogger(CRUD.class.getName());
 	public int last_inserted_id;
 	public int percentage_for_overwrite = 80;
 	RandomAccessFile db_file;
@@ -16,7 +14,6 @@ public class CRUD<Template extends Entidade>
 	{
 		this.constructor = constructor;
 
-		logger.info("Abrindo o arquivo ./dados/dados.db\n");
 		// Tentando abrir arquivo pela primeira vez
 		open_db_file();
 		
@@ -24,11 +21,9 @@ public class CRUD<Template extends Entidade>
 		try
 		{
 			this.last_inserted_id = this.db_file.readInt();
-			logger.info("Ultimo id inserido = " + this.last_inserted_id);
 		}
 		catch(IOException error)
 		{
-			logger.info("Nada escrito no arquivo... Colocando ID inicial como 0...\n");
 			// Se nao retornar IOException, eh pq nao tem nada escrito. Logo, escrevemos 0 nele
 			try
 			{
@@ -37,7 +32,7 @@ public class CRUD<Template extends Entidade>
 			}
 			catch(java.io.IOException io_error)
 			{
-				logger.log(Level.WARNING, "Nao consegui escrever ID inicial em ./dados.db --- Por favor, cheque o stack de erros\n" + io_error);
+				io_error.printStackTrace();
 			}
 		}
 
@@ -52,11 +47,19 @@ public class CRUD<Template extends Entidade>
 		try
 		{
 			open_db_file();
-			rewrite_last_inserted_id();
 
-			Template new_user = this.constructor.newInstance();
-			new_user.set_info(this.last_inserted_id);
-			byte[] user_in_bytes = new_user.to_byte_array();
+			Template new_entity = this.constructor.newInstance();
+			new_entity.set_info(this.last_inserted_id+1);
+
+			// Verifica se o email ja esta cadastrado
+			if(read(new_entity.get_chave_secundaria()) != null)
+			{
+				return -1;
+			}
+
+			byte[] user_in_bytes = new_entity.to_byte_array();
+
+			rewrite_last_inserted_id();
 
 			// O Arquivo Espacos Livres eh um indice indireto sequencial denso que funciona em pares...
 			// Ele tem um par de longs: Um tamanho e um endereco. Esses longs indicam
@@ -68,7 +71,6 @@ public class CRUD<Template extends Entidade>
 			// em seu arquivo se existe algume espaco vazio (algum campo lapide) em dados.db que tenha esse mesmo
 			// tamanho ou que a sobreescrita gere, no minimo, <percentage_for_overwrite>% de ocupacao.
 			long empty_space_address = arq_sequencial.search_empty_space(user_in_bytes.length);
-			arq_sequencial.como_estas();
 
 			// A funcao retorna -1 caso nao tenham usuarios deletados (marcados como lapide)
 			// em dados.db. Nesse caso, a variavel so vai ser mudada para db_file.length(), para os dados
@@ -78,9 +80,6 @@ public class CRUD<Template extends Entidade>
 			
 
 			db_file.seek(empty_space_address);
-
-			logger.info("Escrevendo novo usuario em dados.db\n#email = " + new_user.get_email() + "\n#ID = " + new_user.get_id() + "\n");
-			
 			
 			// Se o arquivo tiver um char ' ' na frente, significa que o campo é valido. Se o char for '*', o
 			// campo denomina uma lapide - Ja teve um arquivo ali antes, mas nao tem mais.
@@ -89,7 +88,6 @@ public class CRUD<Template extends Entidade>
 
 			this.db_file.write(user_in_bytes);
 			
-			logger.info("Novo usuario escrito com sucesso!\n");
 			close_db_file();
 
 			// HashExtensivel eh um indice direto que armazena um par de chaves. Muito parecido com o Arquvo_Espacos_Livres,
@@ -100,7 +98,7 @@ public class CRUD<Template extends Entidade>
 			// A ArvoreBMais_String_Int armazena outro par de informacoes. Email - ID. Retornando o ID, pode-se jogar ele
 			// na HashExtensivel para obter o local no arquivo dados.db
 			ArvoreBMais_String_Int arvore = new ArvoreBMais_String_Int(10, "./dados/index_indireto.db");
-			arvore.create(new_user.get_email(), new_user.get_id());
+			arvore.create(new_entity.get_chave_secundaria(), new_entity.get_id());
 
 			return_value = this.last_inserted_id;
 		}
@@ -118,11 +116,11 @@ public class CRUD<Template extends Entidade>
 	// registro de usuario em dados.db
 	public Template read(int search_id)
 	{
-		Template read_user;
+		Template read_entity;
 		try
 		{
 			// Como eh preciso retornar um usuario, eh preciso criar um novo
-			read_user = this.constructor.newInstance();
+			read_entity = this.constructor.newInstance();
 			open_db_file();
 			
 			HashExtensivel he = new HashExtensivel(4, "diretorio.hash.db", "cestos.hash.db");
@@ -138,7 +136,7 @@ public class CRUD<Template extends Entidade>
 				byte[] user_in_bytes = new byte[db_file.readInt()];
 				db_file.read(user_in_bytes);
 				
-				read_user.from_byte_array(user_in_bytes);
+				read_entity.from_byte_array(user_in_bytes);
 			}
 
 			close_db_file();
@@ -146,10 +144,9 @@ public class CRUD<Template extends Entidade>
 
 		catch(Exception error)
 		{
-			read_user = null;
+			read_entity = null;
 		}
-
-		return read_user;
+		return read_entity;
 	}
 
 
@@ -160,22 +157,22 @@ public class CRUD<Template extends Entidade>
 	// da mesma forma
 	public Template read(String search_email)
 	{
-		Template read_user;
+		Template read_entity;
 		try
 		{
-			read_user = this.constructor.newInstance();
+			read_entity = this.constructor.newInstance();
 			ArvoreBMais_String_Int arvore = new ArvoreBMais_String_Int(10, "./dados/index_indireto.db");
 			int user_id = arvore.read(search_email);
 
-			read_user = read(user_id);
+			read_entity = read(user_id);
 		}
 		catch(Exception error)
 		{
 			System.out.println(error);
-			read_user = null;
+			read_entity = null;
 		}
 
-		return read_user;
+		return read_entity;
 	}
 
 
@@ -183,7 +180,7 @@ public class CRUD<Template extends Entidade>
 	// Se nao for executada corretamente, retorna -1. Caso contrario, retorna a ID do usuario
 	public int update(int update_id)
 	{
-		Template new_user;
+		Template new_entity;
 		int return_value = -1;
 		try
 		{
@@ -195,11 +192,11 @@ public class CRUD<Template extends Entidade>
 			db_file.seek(id_location);
 
 			// Criando nova instancia de um objeto Usuario
-			new_user = this.constructor.newInstance();
-			new_user.set_info(update_id);
+			new_entity = this.constructor.newInstance();
+			new_entity.set_info(update_id);
 
 			char is_lapide = db_file.readChar();
-			byte[] new_user_in_bytes = new_user.to_byte_array();
+			byte[] new_user_in_bytes = new_entity.to_byte_array();
 
 			// Verificando novamente se o campo eh uma lapide, como medida de seguranca
 			if(is_lapide == ' ')
@@ -243,10 +240,8 @@ public class CRUD<Template extends Entidade>
 					db_file.writeInt(new_user_in_bytes.length);
 					db_file.write(new_user_in_bytes);
 
-					arq.como_estas();
-
 					ArvoreBMais_String_Int arvore = new ArvoreBMais_String_Int(10, "./dados/index_indireto.db");
-					arvore.update(new_user.get_email(), new_user.get_id());
+					arvore.update(new_entity.get_chave_secundaria(), new_entity.get_id());
 				}
 			}
 			close_db_file();
@@ -303,20 +298,19 @@ public class CRUD<Template extends Entidade>
 			byte[] deleted_user_in_bytes = new byte[len];
 			db_file.read(deleted_user_in_bytes);
 
-			Template deleted_user = this.constructor.newInstance();
-			deleted_user.from_byte_array(deleted_user_in_bytes);
+			Template deleted_entity = this.constructor.newInstance();
+			deleted_entity.from_byte_array(deleted_user_in_bytes);
 
 			// Deletando informacao desse usuario dos indices direto (Hash Extensivel) e indireto (Arvore B+)
 			he.delete(delete_id);
 			ArvoreBMais_String_Int arvore = new ArvoreBMais_String_Int(10, "./dados/index_indireto.db");
-			arvore.delete(deleted_user.get_email());
+			arvore.delete(deleted_entity.get_chave_secundaria());
 
 			// Indicando para o indice de lapides que um usuario foi deletado de dados.db
 			// Com a chamada da funcao create_entry_grave, o indice de lapides vai armazenar o 
 			// tamanho da nova lapide, e tambem a sua localizacao
 			Indice_Lapides arq = new Indice_Lapides(percentage_for_overwrite);
 			arq.create_entry_grave((long)len, location_id);
-			arq.como_estas();
 
 			close_db_file();
 		}
@@ -334,7 +328,7 @@ public class CRUD<Template extends Entidade>
 			this.db_file = new RandomAccessFile("./dados/dados.db", "rw");	
 		} 
 		catch(Exception error){
-			logger.log(Level.WARNING, "Arquivo nao pode ser aberto. Erro: " + error);
+			error.printStackTrace();
 		}
 	}
 
@@ -345,7 +339,7 @@ public class CRUD<Template extends Entidade>
 			this.db_file.close();
 		}
 		catch(Exception error){
-			logger.log(Level.WARNING, "Nao consegui fechar o arquivo... Erro: " + error);
+			error.printStackTrace();
 		}
 	}
 
@@ -359,7 +353,7 @@ public class CRUD<Template extends Entidade>
 		}
 		catch(IOException error)
 		{
-			logger.log(Level.WARNING, "Nao foi possivel reescrever o ID inicial... Erro: " + error);
+			error.printStackTrace();
 		}
 	}
 }

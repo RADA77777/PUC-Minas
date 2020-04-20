@@ -6,52 +6,15 @@ public class Usuario implements Entidade
 	private int id;
 	private String nome, email, senha;
 
-	public void set_info(int id)
-	{
-		Scanner in =  new Scanner(System.in);
-		this.set_id(id);
-
-		System.out.println("Digite seu nome: ");
-		String nome  = in.nextLine();
-		this.set_nome(nome);
-
-		System.out.println("Digite seu email: ");
-		String email = in.nextLine();
-		this.set_email(email);
-
-		System.out.println("Digite sua senha: ");
-		String senha = in.nextLine();
-		this.set_senha(senha);
-	}
 
 	public int get_id()
 	{
 		return this.id;
 	}
 
-	public void set_id(int new_id)
-	{
-		this.id = new_id;
-	}
-
-	public String get_nome()
-	{
-		return this.nome;
-	}
-
-	public void set_nome(String new_nome)
-	{
-		this.nome = new_nome;
-	}
-
-	public String get_email()
+	public String get_chave_secundaria()
 	{
 		return this.email;
-	}
-
-	public void set_email(String new_email)
-	{
-		this.email = new_email;
 	}
 
 	public String get_senha()
@@ -59,14 +22,40 @@ public class Usuario implements Entidade
 		return this.senha;
 	}
 
-	public void set_senha(String new_senha)
+	public void set_info(int id)
 	{
-		this.senha = new_senha;
+		Scanner in =  new Scanner(System.in);
+		this.id = id;
+
+		System.out.println("Digite seu nome: ");
+		String nome  = in.nextLine();
+		this.nome    = nome;
+
+		System.out.println("Digite seu email: ");
+		String email = in.nextLine();
+		this.email   = email;
+
+		System.out.println("Digite sua senha: ");
+		String senha = in.nextLine();
+		this.senha   = senha;
+		
+		in.close();
 	}
 
-	public String chave_secundaria()
+	public void set_info(String email)
 	{
-		return this.email;
+		Scanner in = new Scanner(System.in);
+		this.email = email;
+		
+		System.out.println("Digite seu nome: ");
+		String nome  = in.nextLine();
+		this.nome    = nome;
+
+		System.out.println("Digite sua senha: ");
+		String senha = in.nextLine();
+		this.senha   = senha;
+
+		in.close();
 	}
 
 	public byte[] to_byte_array() throws IOException
@@ -87,18 +76,18 @@ public class Usuario implements Entidade
 		ByteArrayInputStream dados = new ByteArrayInputStream(bytes);
 		DataInputStream entrada = new DataInputStream(dados);
 		
-		set_id(entrada.readInt());
-		set_nome(entrada.readUTF());
-		set_email(entrada.readUTF());
-		set_senha(entrada.readUTF());
+		this.id     = (entrada.readInt());
+		this.nome   = (entrada.readUTF());
+		this.email  = (entrada.readUTF());
+		this.senha  = (entrada.readUTF());
 	}
 
 	public void print_entity()
 	{
-		System.out.println( "ID........ " + this.get_id()    + 
-						    "\nNome.... " + this.get_nome()  + 
-							"\nEmail... " + this.get_email() + 
-							"\nSenha... " + this.get_senha()
+		System.out.println( "ID...... " + this.id    + 
+						  "\nNome.... " + this.nome  + 
+						  "\nEmail... " + this.email + 
+						  "\nSenha... " + this.senha
 							);
 	}
 }
