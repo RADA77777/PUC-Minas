@@ -12,6 +12,11 @@ public class Usuario implements Entidade
 		return this.id;
 	}
 
+	public void set_id(int id)
+	{
+		this.id = id;
+	} 
+
 	public String get_chave_secundaria()
 	{
 		return this.email;
@@ -22,40 +27,50 @@ public class Usuario implements Entidade
 		return this.senha;
 	}
 
-	public void set_info(int id)
+	public int set_info(int id, Scanner in)
 	{
-		Scanner in =  new Scanner(System.in);
-		this.id = id;
+		set_id(id);
 
-		System.out.println("Digite seu nome: ");
+		System.out.println("Seu nome: ");
 		String nome  = in.nextLine();
+		if(nome.equals(""))
+			return -1;
 		this.nome    = nome;
 
-		System.out.println("Digite seu email: ");
+		System.out.println("Seu email: ");
 		String email = in.nextLine();
+		if(email.equals(""))
+			return -1;
 		this.email   = email;
 
-		System.out.println("Digite sua senha: ");
+		System.out.println("Senha: ");
 		String senha = in.nextLine();
+		if(senha.equals(""))
+			return -1;
 		this.senha   = senha;
-		
-		in.close();
+
+		return 0;
 	}
 
-	public void set_info(String email)
+	public int set_info(String email, Scanner in)
 	{
-		Scanner in = new Scanner(System.in);
-		this.email = email;
-		
-		System.out.println("Digite seu nome: ");
+		set_id(-1);
+
+		System.out.println("Nome: ");
 		String nome  = in.nextLine();
+		if(nome.equals(""))
+			return -1;	
 		this.nome    = nome;
 
-		System.out.println("Digite sua senha: ");
+		this.email   = email;
+
+		System.out.println("Senha: ");
 		String senha = in.nextLine();
+		if(senha.equals(""))
+			return -1;
 		this.senha   = senha;
 
-		in.close();
+		return 0;
 	}
 
 	public byte[] to_byte_array() throws IOException

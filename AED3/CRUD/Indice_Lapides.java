@@ -8,14 +8,15 @@ import java.io.RandomAccessFile;
 // Leia as funcoes insert_empty_space e search_empty_space para entender melhor o funcionamento.
 public class Indice_Lapides
 {
-    String save_location = "./dados/espacos.db";
+    String save_location;
     int percentage_for_overwrite;
     RandomAccessFile file;
 
-    Indice_Lapides(int percentage_for_overwrite)
+    Indice_Lapides(int percentage_for_overwrite, String save_location)
     {
         try
         {
+            this.save_location = save_location;
             open_file();
 
             if(file.length() == 0)
