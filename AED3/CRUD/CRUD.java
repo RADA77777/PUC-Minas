@@ -48,6 +48,15 @@ public class CRUD<Template extends Entidade>
 			this.arvore_int_int_location       =  "./dados/arvore_int_int_grupos.db";
 			this.index_empty_spaces            =  "./dados/espacos_grupos.db";
 		}
+		
+		else if(db_file_location.equals("./dados/convites.db"))
+		{
+			this.diretorio_hashtable_location  =  "./dados/diretorio_convites.db";
+			this.cesto_hashtable_location      =  "./dados/cestos_convites.db";
+			this.arvore_str_int_location       =  "./dados/arvore_srt_int_convites.db";
+			this.arvore_int_int_location       =  "./dados/arvore_int_int_convites.db";
+			this.index_empty_spaces            =  "./dados/espacos_convites.db";
+		}
 
 
 		// Tentando abrir arquivo pela primeira vez
@@ -130,7 +139,7 @@ public class CRUD<Template extends Entidade>
 			ArvoreBMais_String_Int arvore_str_int = new ArvoreBMais_String_Int(10, arvore_str_int_location);
 			arvore_str_int.create(new_entity.get_chave_secundaria(), new_entity.get_id());
 
-			// TODO Rever isso no crud de convites
+
 			if(! this.arvore_int_int_location.equals(""))
 			{
 				ArvoreBMais_Int_Int arvore_int_int = new ArvoreBMais_Int_Int(10, this.arvore_int_int_location);
@@ -204,7 +213,6 @@ public class CRUD<Template extends Entidade>
 		}
 		catch(Exception error)
 		{
-			System.out.println(error);
 			read_entity = null;
 		}
 

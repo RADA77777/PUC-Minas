@@ -1,7 +1,6 @@
 import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Calendar;
 import java.util.Scanner;
 
 public class Grupo implements Entidade{
@@ -16,9 +15,14 @@ public class Grupo implements Entidade{
         return this.id_usuario;
     }
 
-    public int get_id_sugestao()
+    public int get_id_grupo()
     {
         return this.id;
+    }
+
+    public String get_nome()
+    {
+        return this.nome;
     }
 
     public void set_id(int id)
@@ -41,11 +45,15 @@ public class Grupo implements Entidade{
         this.sorteado = sorteado;
     }
     
-    public boolean get_ativo()
+    public boolean is_ativo()
     {
         return this.ativo;
     }
 
+    public boolean is_sorteado()
+    {
+        return this.sorteado;
+    }
 
 	public byte[] to_byte_array() throws IOException
 	{
@@ -167,7 +175,7 @@ public class Grupo implements Entidade{
         System.out.printf("Ano do " + evento + ": ");
         int ano = in.nextInt();
 
-        String event_date_str = dia + "-" + mes + "-" + ano;
+        String event_date_str = mes + "-" + dia + "-" + ano;
         SimpleDateFormat event_date = new SimpleDateFormat("dd-MM-yyyy");
         
         try

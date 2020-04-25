@@ -27,6 +27,11 @@ public class Usuario implements Entidade
 		return this.senha;
 	}
 
+	public String get_nome()
+	{
+		return this.nome;
+	}
+
 	public int set_info(int id, Scanner in)
 	{
 		set_id(id);
@@ -56,7 +61,7 @@ public class Usuario implements Entidade
 	{
 		set_id(-1);
 
-		System.out.println("Nome: ");
+		System.out.printf("Nome: ");
 		String nome  = in.nextLine();
 		if(nome.equals(""))
 			return -1;	
@@ -64,7 +69,7 @@ public class Usuario implements Entidade
 
 		this.email   = email;
 
-		System.out.println("Senha: ");
+		System.out.printf("Senha: ");
 		String senha = in.nextLine();
 		if(senha.equals(""))
 			return -1;
