@@ -240,6 +240,43 @@ public class ListaInvertida
     }
 
 
+    // recebe um array de strings. 
+    // Essa funcao vai concatenar as strings do array e passar para a funcao read(String str)
+    public int[] read(String [] str_array)
+    {
+        String bundled = "";
+        for(String s: str_array)
+        {
+            s = s.replace(" ", "");
+            bundled += (s + " ");
+        }
+
+        int[] array_ids = this.read(bundled);
+
+        return array_ids;
+    }
+
+
+    // abre <this.database> e retorna um array contendo as strings associadas a cada ID do array
+    public String[] get_paired_strings(int[] array_ids)
+    {
+        ArrayList<String> aux_arraylist = new ArrayList<String>();
+        String aux_str;
+
+        for(int i: array_ids)
+        {
+            aux_str = this.database.read(i);
+            // se string nao for vazia, adicionar ao arraylist
+            if(!aux_str.equals(""))
+                aux_arraylist.add(this.database.read(i));
+        }
+
+        String[] str_array = new String[aux_arraylist.size()];
+        
+        return aux_arraylist.toArray(str_array);
+    }
+
+
     // usar apenas para debug.
     // Printa os valores inseridos na lista
     public void status()

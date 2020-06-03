@@ -7,21 +7,20 @@ public class main
     public static void main(String[] args)
     {
         String save_file = "./dados_usuarios";
-
         ListaInvertida l = new ListaInvertida(save_file);
-        ArquivoSequencial database = new ArquivoSequencial(save_file + ".db");
+
+        l.create("Marcos Antônio de Oliveira");
+        l.create("José Marcos Resende");
+        l.create("Paula Oliveira");
+        l.create("Carlos José Antônio Souza");
+        l.create("José Carlos de Paula");
         
-        /*
-        l.create("João da Silva");
-        l.create("João Silva");
-        l.create("joao silva");
-        l.create("joao da silva");
-        */
-
-        l.status();
-        int array_ids[] = l.read("joao");
-
-        for(int i: array_ids)
-            System.out.printf("ID = %d -- Nome = %s\n", i, database.read(i));
+        // teste com as strings "paula" e "jose"
+        String[] a = {"paula", "jose"};
+        int array_ids[] = l.read(a);
+    
+        String[] paired_strings = l.get_paired_strings(array_ids);
+        for(String s: paired_strings)
+            System.out.println(s);
     }
 }
