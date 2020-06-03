@@ -18,30 +18,22 @@ public class ArquivoSequencial
     // armazena no arquivo o par <str> <number>
     public void create(long number, String str)
     {
-        // se retornar -1, eh pq essa string ainda nao existe no arquivo
-        boolean not_exists = (this.read(str) == -1); 
-
-        // caso nao exista, armazenar no final do arquivo
-        if(not_exists)
+        try
         {
-            try
-            {
-                this.open_file();
-                
-                file.seek(file.length());
+            this.open_file();
+            
+            file.seek(file.length());
 
-                file.writeUTF(str);
-                file.writeLong(number);
+            file.writeUTF(str);
+            file.writeLong(number);
 
-                this.close_file();
-            }
-            catch(Exception error)
-            {
-                error.printStackTrace();
-                System.exit(1);
-            }
+            this.close_file();
         }
-
+        catch(Exception error)
+        {
+            error.printStackTrace();
+            System.exit(1);
+        }
     }
 
 
@@ -61,12 +53,12 @@ public class ArquivoSequencial
             {
                 // se a string do arquivo for igual a string procurada, retornar
                 // o endereco de onde ela esta na lista invertida
-                if( searched_str.equals(this.file.readUTF()) )
+                if( searched_str.equalsIgnoreCase(this.file.readUTF()) )
                 {
                     paired_long = this.file.readLong();
                     flag = false;
                 }
-                // se nao achou o nome, pular o long que representa o endereco
+                // se nao achou <searched_str>, pular o long que representa o endereco
                 else
                     this.file.seek(this.file.getFilePointer() + 8);
             }
@@ -121,7 +113,7 @@ public class ArquivoSequencial
 
 
     // usar apenas para debug
-    // printa na tela os pares correspondentes <Nome> <ID>
+    // printa na tela os pares correspondentes <String> <ID>
     public void status()
     {
         try

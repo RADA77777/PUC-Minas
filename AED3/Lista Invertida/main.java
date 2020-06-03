@@ -1,6 +1,7 @@
 import src.ArquivoSequencial;
 import src.ListaInvertida;
 
+
 public class main
 {
     public static void main(String[] args)
@@ -10,24 +11,17 @@ public class main
         ListaInvertida l = new ListaInvertida(save_file);
         ArquivoSequencial database = new ArquivoSequencial(save_file + ".db");
         
-        l.status();
-        l.create("Rafael");
-        System.out.println("\nR inserido");
-        l.status();
-        l.create("Rafael Amauri");
-        System.out.println("\nRA inserido");
-        l.status();
-        
         /*
-        //l.status();
-        int a[] = l.read("Amauri");
-
-        //database.status();
-        for(int i:a)
-        {
-            System.out.println(database.read(i));
-        }
-
+        l.create("João da Silva");
+        l.create("João Silva");
+        l.create("joao silva");
+        l.create("joao da silva");
         */
+
+        l.status();
+        int array_ids[] = l.read("joao");
+
+        for(int i: array_ids)
+            System.out.printf("ID = %d -- Nome = %s\n", i, database.read(i));
     }
 }
