@@ -1,9 +1,8 @@
 package src;
 
 import java.io.RandomAccessFile;
-import java.text.Normalizer;
 import java.util.ArrayList;
-
+import utils.utils;
 
 public class ListaInvertida
 {
@@ -14,6 +13,7 @@ public class ListaInvertida
     private int last_id;                    // int representando o ultimo id que foi inserido
     private int OVERFLOW_LIMIT = 10;        // quantidade maxima de IDs que pode ser armazenada em sequencia
     private String[] stop_words = {"da", "de", "do", "das", "dos"}; // stop words
+
 
     public ListaInvertida(String save_file)
     {
@@ -52,7 +52,7 @@ public class ListaInvertida
     // estao em this.stop_words
     public void create(String str)
     {
-        String cleared_str  =  this.clear_string(str); // limpando string de acentos, caracteres especiais...
+        String cleared_str  =  utils.clear_string(str); // limpando string de acentos, caracteres especiais...
         
         try
         {
@@ -84,7 +84,7 @@ public class ListaInvertida
                     this.reverse_list.writeInt(last_id);
 
                     // pulando as casas dos outros ints para inserir -1 no ponteiro para proximo
-                    this.reverse_list.seek( this.reverse_list.getFilePointer() + (Integer.SIZE/8)*(9) );
+                    this.reverse_list.seek( this.reverse_list.getFilePointer() + ((Integer.SIZE/8)*(this.OVERFLOW_LIMIT-1)));
                     this.reverse_list.writeLong(-1);
                 }
 
@@ -108,7 +108,7 @@ public class ListaInvertida
                         while(flag_overflow)
                         {
                             // pular os ids
-                            this.reverse_list.seek( this.reverse_list.getFilePointer() + (Integer.SIZE/8)*(OVERFLOW_LIMIT));
+                            this.reverse_list.seek( this.reverse_list.getFilePointer() + ((Integer.SIZE/8)*(this.OVERFLOW_LIMIT)));
                             pointer_next = this.reverse_list.getFilePointer();
 
                             // se pointer_next for igual a -1, deve ser criada uma nova secao no fim do arquivo
@@ -124,7 +124,7 @@ public class ListaInvertida
                                 quant_ids = 0;
 
                                 // pulando o int de quantidade e os IDs para inserir -1 no ponteiro para proximo
-                                this.reverse_list.seek( this.reverse_list.getFilePointer() + (Integer.SIZE/8)*(this.OVERFLOW_LIMIT+1) );
+                                this.reverse_list.seek( this.reverse_list.getFilePointer() + ((Integer.SIZE/8)*(this.OVERFLOW_LIMIT+1)));
                                 this.reverse_list.writeLong(-1);
 
                                 flag_overflow = false;
@@ -148,7 +148,7 @@ public class ListaInvertida
                     this.reverse_list.writeInt(quant_ids+1);
                     
                     // pular <quant> ints para fazer a nova insercao no espaco vazio
-                    this.reverse_list.seek(this.reverse_list.getFilePointer() + (Integer.SIZE/8)*quant_ids);
+                    this.reverse_list.seek(this.reverse_list.getFilePointer() + ((Integer.SIZE/8)*quant_ids));
                     this.reverse_list.writeInt(this.last_id);
                 }
             }
@@ -169,11 +169,11 @@ public class ListaInvertida
     
 
     // Recebe uma string e procura se ela existe nessa lista invertida.
-    public int[] read(String search_str)
+    private int[] _read(String search_str)
     {
         int quant_ids;
 
-        String[] array_terms          =  this.clear_string(search_str).split(" "); // limpando string
+        String[] array_terms          =  utils.clear_string(search_str).split(" "); // limpando string
         ArrayList<Integer> array_ids  =  new ArrayList<Integer>();
         ArrayList<Integer> aux_array  =  new ArrayList<Integer>();
 
@@ -242,7 +242,7 @@ public class ListaInvertida
 
     // recebe um array de strings. 
     // Essa funcao vai concatenar as strings do array e passar para a funcao read(String str)
-    public int[] read(String [] str_array)
+    public int[] read(String[] str_array)
     {
         String bundled = "";
         for(String s: str_array)
@@ -251,7 +251,7 @@ public class ListaInvertida
             bundled += (s + " ");
         }
 
-        int[] array_ids = this.read(bundled);
+        int[] array_ids = this._read(bundled);
 
         return array_ids;
     }
@@ -288,13 +288,11 @@ public class ListaInvertida
             int quant_ids, id;
             long next;
 
-
             // se a lista nao estiver vazia, printar o primeiro int dela.
             // O primeiro int se refere ao last_id
             if(this.reverse_list.getFilePointer() != this.reverse_list.length())
                 System.out.println(this.reverse_list.readInt());
 
-            
             // enquanto nao chegar no fim da lista, printar
             // <quantidade_ids> <lista dos ids> <proximo>
             while(this.reverse_list.getFilePointer() != this.reverse_list.length())
@@ -308,7 +306,7 @@ public class ListaInvertida
                     System.out.printf("%d ", id);
                 }
 
-                this.reverse_list.seek(this.reverse_list.getFilePointer() + (Integer.SIZE/8)*(this.OVERFLOW_LIMIT-quant_ids));
+                this.reverse_list.seek(this.reverse_list.getFilePointer() + ((Integer.SIZE/8)*(this.OVERFLOW_LIMIT-quant_ids)));
                 next = this.reverse_list.readLong();
 
                 System.out.println(next);
@@ -373,17 +371,6 @@ public class ListaInvertida
     }
 
 
-    // limpar a string de caracteres especiais. Todo o texto
-    // deve ser em ASCII para inserir no arquivo sequencial de termos
-    private String clear_string(String str)
-    {
-        String cleared_str = Normalizer.normalize(str, Normalizer.Form.NFD);
-        cleared_str = cleared_str.replaceAll("[^\\p{ASCII}]", "");
-
-        return cleared_str;
-    }
-
-
     // retorna booleano indicando se <str> esta na lista de stop words
     private boolean is_in_stop_words(String str)
     {
@@ -397,5 +384,5 @@ public class ListaInvertida
             }
 
         return contained;
-    }
+    }    
 }

@@ -1,4 +1,3 @@
-import src.ArquivoSequencial;
 import src.ListaInvertida;
 
 
