@@ -4,10 +4,11 @@ import java.text.Normalizer;
 import java.io.RandomAccessFile;
 
 
+// Colecao de funcoes que nao sao especificas a uma unica classe 
+// e que podem ser usadas por todas
 public class utils
 {
-    // limpar a string de caracteres especiais. Todo o texto
-    // deve ser em ASCII para inserir no arquivo sequencial de termos
+    // limpa uma string de caracteres especiais
     public static String clear_string(String str)
     {
         String cleared_str = Normalizer.normalize(str, Normalizer.Form.NFD);
@@ -17,7 +18,7 @@ public class utils
     }
 
 
-    // recebe um caminho para arquivo e retorna um RandomAccessFile para lida e escrita
+    // recebe um caminho para arquivo e retorna um RandomAccessFile com permissoes para rw
     public static RandomAccessFile open_file(String filepath) throws Exception
     {
         try
@@ -33,7 +34,7 @@ public class utils
     }
 
 
-    // recebe um ponteiro para RandomAccessFile e fecha a stream de dados
+    // recebe um ponteiro para RandomAccessFile e fecha o arquivo
     public static void close_file(RandomAccessFile file) throws Exception
     {
         try
