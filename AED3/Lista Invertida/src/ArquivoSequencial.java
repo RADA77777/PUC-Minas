@@ -1,5 +1,7 @@
 package src;
 
+import utils.utils;
+
 import java.io.RandomAccessFile;
 
 
@@ -20,14 +22,14 @@ public class ArquivoSequencial
     {
         try
         {
-            this.open_file();
+            this.file = utils.open_file(this.save_location);
             
             file.seek(file.length());
 
             file.writeUTF(str);
             file.writeLong(number);
 
-            this.close_file();
+            utils.close_file(this.file);
         }
         catch(Exception error)
         {
@@ -45,7 +47,7 @@ public class ArquivoSequencial
         
         try
         {
-            this.open_file();
+            this.file = utils.open_file(this.save_location);
 
             // enquanto nao chegar no fim do arquivo ou nao tiver achado
             // a string, continuar percorrendo 
@@ -62,7 +64,7 @@ public class ArquivoSequencial
                 else
                     this.file.seek(this.file.getFilePointer() + 8);
             }
-            this.close_file();
+            utils.close_file(this.file);
         }
         catch(Exception error)
         {
@@ -82,7 +84,7 @@ public class ArquivoSequencial
 
         try
         {
-            this.open_file();
+            this.file = utils.open_file(this.save_location);
 
             // enquanto nao tiver achado <searched_number> ou chegar no
             // final do arquivo, continuar percorrendo
@@ -100,7 +102,7 @@ public class ArquivoSequencial
             if(flag)
                 paired_str = "";
 
-            this.close_file();
+            utils.close_file(this.file);
         }
         catch(Exception error)
         {
@@ -118,48 +120,18 @@ public class ArquivoSequencial
     {
         try
         {
-            this.open_file();
+            this.file = utils.open_file(this.save_location);
 
             while(file.getFilePointer() != this.file.length())
                 System.out.println("Nome = " + this.file.readUTF() + " - ID = " + file.readLong());
 
             
-            this.close_file();
+            utils.close_file(this.file);
         }
         catch(Exception error)
         {
             error.printStackTrace();
             System.exit(1);
-        }
-    }
-
-
-    // abre esse arquivo para leitura/escrita
-    private void open_file() throws Exception
-    {
-        try
-        {
-            this.file = new RandomAccessFile(this.save_location, "rw");
-        }
-        catch(Exception error)
-        {
-            error.printStackTrace();
-            throw error;
-        }
-    }
-
-
-    // fecha esse arquivo
-    private void close_file() throws Exception
-    {
-        try
-        {
-            this.file.close();
-        }
-        catch(Exception error)
-        {
-            error.printStackTrace();
-            throw error;
         }
     }
 }

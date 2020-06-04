@@ -1,8 +1,10 @@
 package src;
 
+import utils.utils;
+
 import java.io.RandomAccessFile;
 import java.util.ArrayList;
-import utils.utils;
+
 
 public class ListaInvertida
 {
@@ -23,7 +25,7 @@ public class ListaInvertida
 
         try
         {
-            this.open_file();
+            this.reverse_list = utils.open_file(this.save_location);
 
             // verifica se o arquivo esta vazio (length == 0).
             // Se estiver, escreve o ultimo ID como sendo 1. 
@@ -36,7 +38,7 @@ public class ListaInvertida
             else
                 this.last_id = this.reverse_list.readInt();
 
-            this.close_file();
+            utils.close_file(this.reverse_list);
         }
         catch(Exception error)
         {
@@ -56,7 +58,7 @@ public class ListaInvertida
         
         try
         {
-            this.open_file();
+            this.reverse_list = utils.open_file(this.save_location);
 
             // para cada string <s> no array apos o split(" ")
             for(String s: cleared_str.split(" "))
@@ -152,7 +154,7 @@ public class ListaInvertida
                     this.reverse_list.writeInt(this.last_id);
                 }
             }
-            this.close_file();
+            utils.close_file(this.reverse_list);
         }
         catch(Exception error)
         {
@@ -183,7 +185,7 @@ public class ListaInvertida
 
         try
         {
-            this.open_file();
+            this.reverse_list = utils.open_file(this.save_location);
 
             // para cada termo em array_terms, procurar o termo
             // no indice
@@ -225,7 +227,7 @@ public class ListaInvertida
                 aux_array.clear();
             }
 
-            this.close_file();
+            utils.close_file(this.reverse_list);
         }
         catch(Exception error)
         {
@@ -283,7 +285,7 @@ public class ListaInvertida
     {
         try
         {
-            this.open_file();
+            this.reverse_list = utils.open_file(this.save_location);
 
             int quant_ids, id;
             long next;
@@ -311,7 +313,7 @@ public class ListaInvertida
 
                 System.out.println(next);
             }
-            this.close_file();
+            utils.close_file(this.reverse_list);
         }
         catch(Exception error)
         {
@@ -321,46 +323,16 @@ public class ListaInvertida
     }
 
 
-    // abre o arquivo da lista invertida para leitura/escrita
-    private void open_file() throws Exception
-    {
-        try
-        {
-            this.reverse_list = new RandomAccessFile(this.save_location, "rw");
-        }
-        catch(Exception error)
-        {
-            error.printStackTrace();
-            throw error;
-        }
-    }
-
-
-    // fecha o arquivo da lista invertida
-    private void close_file() throws Exception
-    {
-        try
-        {
-            this.reverse_list.close();
-        }
-        catch(Exception error)
-        {
-            error.printStackTrace();
-            throw error;
-        }
-    }
-
-
     // O primeiro int do arquivo da lista invertida eh o ultimo ID inserido
     private void rewrite_last_id()
     {
         try
         {
-            this.open_file();
+            this.reverse_list = utils.open_file(this.save_location);
             
             this.reverse_list.writeInt(++this.last_id);
 
-            this.close_file();
+            utils.close_file(reverse_list);
         }
         catch(Exception error)
         {

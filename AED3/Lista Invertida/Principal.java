@@ -1,7 +1,7 @@
 import src.ListaInvertida;
 
 
-public class main
+public class Principal
 {
     public static void main(String[] args)
     {
@@ -12,8 +12,8 @@ public class main
         l.create("José Marcos Resende");
         l.create("Paula Oliveira");
         l.create("Carlos José Antônio Souza");
-        l.create("José Carlos de Paula");
-        
+        l.create("José Carlos de Paula");        
+
         // teste com as strings "paula" e "jose"
         String[] a = {"paula", "jose"};
         int array_ids[] = l.read(a);
