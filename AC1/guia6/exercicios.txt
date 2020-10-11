@@ -1,0 +1,558 @@
+Aluno: Rafael Amauri Diniz Augusto
+Matricula: 651047
+
+Questao 1:
+
+A) m(1,3,7)
+
+        0         1
+xy\z
+
+00     (0)        1
+
+01     (2)        1
+
+11     (6)        1
+
+10     (4)       (5)
+
+
+x'.y'.z + x'.y.z + x.y.z
+
+Com(1,3) = x'.z
+Com(3,7) = y.z
+
+Expressao = x'.z + y.z
+
+
+B) m(0,2,6)
+
+
+        0         1
+xy\z
+
+00      1        (1)
+
+01      1        (3)
+
+11      1        (7)
+
+10     (4)       (5)
+
+
+x'.y'.z' + x'.y.z' + x.y.z'
+
+Com(0,2) = x'.z'
+Com(2,6) = y.z'
+
+Expressao = x'.z' + y.z'
+
+
+C) m(1,2,3,6)
+
+
+        0         1
+xy\z
+
+00     (0)        1
+
+01      1         1
+
+11      1        (7)
+
+10     (4)       (5)
+
+
+x'.y'.z + x'.y.z' + x'.y.z + x.y.z'
+
+Com(1,3) = x'.z
+Com(2,6) = y.z'
+
+Expressao = x'.z + y.z'
+
+
+D) m(1,2,6,7)
+
+
+        0         1
+xy\z
+
+00     (0)        1
+
+01      1        (3)
+
+11      1         1
+
+10     (4)       (5)
+
+
+x'.y'.z + x'.y.z' + x.y.z' + x.y.z
+
+Com(2,6) = y.z'
+Com(6,7) = x.y
+
+Expressao = x'.y'.z + y.z' + x.y
+
+
+E) m(0,2,3,7)
+
+
+        0         1
+xy\z
+
+00      1        (1)
+
+01      1         1
+
+11     (6)        1
+
+10     (4)       (5)
+
+
+x'.y'.z' + x'.y.z' + x'.y.z + x.y.z
+
+Com(0,2) = x'.z'
+Com(3,7) = y.z
+
+Expressao = x'.z' + y.z
+
+
+Questao 3 - Parte 1:
+
+A) M(2,6,7)
+
+     
+
+        0         1
+xy\z
+
+00     (0)       (1)
+
+01      0        (3) 
+
+11      0         0
+
+10     (4)       (5)
+
+
+x.y'.z + x'.y'.z + x'.y'.z'
+
+Com(2,6) = y'.z
+Com(6,7) = x'.y'
+
+Expressao = y'.z + x'.y'
+
+
+B) M(1,3,7)
+
+
+        0         1
+xy\z
+
+00     (0)        0
+
+01     (2)        0 
+
+11     (6)        0
+
+10     (4)       (5)
+
+
+x.y.z' + x.y'.z' + x'.y'.z'
+
+Com(1,3) = x.z'
+Com(3,7) = y'.z'
+
+Expressao = x.z' + y'.z'
+
+
+C) M(1,3,4,5)
+
+
+        0         1
+xy\z
+
+00     (0)        0
+
+01     (2)        0 
+
+11     (6)       (7)
+
+10      0         0
+
+
+
+x.y.z' + x.y'.z' + x'.y.z + x'.y.z'
+
+Com(1,3) = x.z'
+Com(4,5) = x'.y
+
+Expressao = x.z' + x'.y
+
+
+D) M(0,1,5,7)
+
+
+        0         1
+xy\z
+
+00      0         0
+
+01     (2)       (3) 
+
+11     (6)        0
+
+10     (4)        0
+
+
+
+x.y.z + x.y.z' + x'.y.z' + x'.y'.z'
+
+Com(0,1) = x.y
+Com(5,7) = x'.z'
+
+Expressao = x.y + x'.z'
+
+
+E) M(1,2,5,6)
+
+
+
+        0         1
+xy\z
+
+00     (0)        0
+
+01      0        (3) 
+
+11      0        (7)
+
+10     (4)        0
+
+
+
+
+x.y.z' + x.y'.z + x'.y'.z + x'.y.z'
+
+
+Com(1,6) = y.z'
+Com(2,5) = y'.z
+
+
+Expressao = y.z' + y'.z
+
+
+Questao 3 - Parte 2: 
+
+
+A) m(1,3,6,7,11,15)
+
+
+
+        00        01        11        10
+xy\wz
+
+00     (0)        1          1        (2)   
+
+01     (4)       (5)         1         1          
+
+11     (12)      (13)        1        (14)
+
+10     (8)       (9)         1        (10)
+
+
+x'.y'.w'.z + x'.y'.w.z + x'.y.w.z + x'.y.w.z' + x.y.w.z + x.y'.w.z
+
+
+Com(1,3) = x'.y'.z
+Com(6,7) = x'.y.w
+Com(11,15) = x.w.z
+
+Expressao = x'.y'.z + x'.y.w + x.w.z
+
+
+
+B) m(0,2,3,5,9,13)
+
+        00        01        11        10
+xy\wz
+
+00      1        (1)         1         1
+
+01     (4)        1         (7)       (6)           
+
+11     (12)       1         (15)      (14)
+
+10     (8)        1         (11)      (10)
+
+
+
+x'.y'.w'.z' + x'.y'.w.z' +  x'.y'.w.z + x'.y.w'.z + x.y.w'.z + x.y'.w'.z
+
+Com(0,2) = x'.y'.z'
+Com(2,3) = x'.y'.w
+Com(5,9) = y.w'.z
+Com(9,13) = x.w'.z
+
+
+Expressao = x'.y'.z' + x'.y'.w + y.w'.z + x.w'.z
+
+
+
+C) m(0,1,2,3,5,8,10,12)
+
+
+        00        01        11        10
+xy\wz
+
+00      1         1          1         1   
+
+01     (4)        1         (7)       (6)           
+
+11      1        (13)       (15)      (14)
+
+10      1        (9)        (11)       1
+
+
+0                   1         2           3           5            12           8          10 
+x'.y'.w'.z' + x'.y'.w'.z + x'.y'.w.z + x'.y'.w.z' + x'.y.w'.z + x.y.w'.z' + x.y'.w'.z' + x.y'.w.z'
+
+
+Com(0,1) = x'.y'.w'
+Com(1,2) = x'.y'.z
+Com(2,3) = x'.y'.w
+Com(1,5) = x'.w'.z
+Com(12,8) = x.w'.z'
+Com(10,8) = x.y'.z'
+
+Expressao Geral = x'.y'.w' + x'.y'.z + x'.y'.w + x'.w'.z + x.w'.z' + x.y'.z'
+Simplificando   = x'.y' + y'.z' + x'.w'.z + x.w'.z'
+
+
+
+
+D) m(2,4,5,8,10,12,13)
+
+
+
+        00        01        11        10
+xy\wz
+
+00     (0)       (1)        (3)        1
+
+01      1         1         (7)       (6)           
+
+11      1         1         (15)      (14)
+
+10      1        (9)        (11)       1
+
+
+2                  4            5          8            10       12             13
+x'.y'.w.z' +  x'.y.w'.z' + x'.y.w'.z + x.y'.w'.z' + x.y'.w.z' + x.y.w'.z' + x.y.w'.z
+
+
+Com(2,10)  = y'.w.z'
+Com(8,10)  = x.y'.z'
+
+Com(4,5)   = x'.y.w' =>  y.w'
+Com(12,13) = x.y.w'  =>
+
+
+Expressao = y.w' + y'.w.z' + x.y'.z'
+
+
+
+
+E) m(0,1,2,7,9,11,13,15)
+
+
+        00        01        11        10
+xy\wz
+
+00      1         1         (3)        1
+
+01     (4)       (5)         1        (6)           
+
+11     (12)       1          1       (14)
+
+10     (8)        1          1       (10)
+
+
+
+0                  1             2         7           9            11          13        15
+x'.y'.w'.z' + x'.y'.w'.z + x'.y'.w.z' +  x'.y.w.z +  x.y'.w'.z + x.y'.w.z + x.y.w'.z + x.y.w.z
+
+Com(0,1)   = x'.y'.w'
+Com(0,2)   = x'.y'.z'
+Com(7,15)  = y.w.z
+
+Com(15,11) = x.w.z   => x.z
+Com(13,9)  = x.w'.z  =>
+ 
+Expressao = x.z + x'.y'.w' + x'.y'.z' + y.w.z
+
+
+
+
+Questao 4:
+
+A) M(2,5,7,10)
+
+
+
+        00        01        11        10
+xy\wz
+
+00     (0)       (1)        (3)        0
+
+01     (4)        0          0        (6)           
+
+11     (12)      (13)       (15)      (14)
+
+10     (8)       (9)        (11)       0
+
+
+
+2            5             7            10
+x.y.w'.z + x.y'.w.z' + x.y'.w'.z' + x'.y.w'.z
+
+
+
+Com(2,10) = y.w'.z 
+Com(5,7)  = x.y'.z'
+
+Expressao = y.w'.z + x.y'.z'
+
+
+B) M(4,8,9,12,13) 
+
+
+        00        01        11        10
+xy\wz
+
+00     (0)       (1)        (3)       (2)
+
+01      0        (5)        (7)       (6)           
+
+11      0         0         (15)      (14)
+
+10      0         0         (11)      (10)
+
+
+4           8              9         12            13
+x.y'.w.z + x'.y.w.z + x'.y.w.z' + x'.y'.w.z + x'.y'.w.z'
+
+Com(4,12)  = y'.w.z
+
+Com(12,13) = x'.y'.w  => x'.w
+Com(8,9)   = x'.y.w   => 
+
+Expressao = y'.w.z + x'.w
+
+
+C) M(4,5,13,14,15)
+
+
+        00        01        11        10
+xy\wz
+
+00     (0)       (1)        (3)       (2)
+
+01      0         0         (7)       (6)           
+
+11     (12)       0          0         0
+
+10     (8)       (9)        (11)      (10)
+
+
+
+4             5              13         14         15
+x.y'.w.z + x.y'.w.z' + x'.y'.w.z' + x'.y'.w'.z + x'.y'.w'.z'
+
+
+Com(4,5)   = x.y'.w
+Com(5,13)  = y'.w.z'
+Com(14,15) = x'.y'.w'
+
+
+Expressao = x.y'.w + y'.w.z' + x'.y'.w'
+
+
+
+D) M(1,3,6,7,11,14) 
+
+
+        00        01        11        10
+xy\wz
+
+00     (0)        0          0        (2)
+
+01     (4)       (5)         0         0           
+
+11     (12)      (13)       (15)       0
+
+10     (8)       (9)         0        (10)
+
+
+1              3           6           7            11            14
+x.y.w.z' +  x.y.w'.z' + x.y'.w'.z +  x.y'.w'.z' + x'.y.w'.z' + x'.y'.w'.z
+
+Com(1,3)  = x.y.z'
+Com(3,11) = y.w'.z'
+Com(6,7)  = x.y'.w'
+Com(6,14) = y'.w'.z
+
+
+Expressao = x.y.z' + y.w'.z' + x.y'.w' + y'.w'.z
+
+E) M(4,5,6,7,12,15)
+
+
+        00        01        11        10
+xy\wz
+
+00     (0)       (1)        (3)       (2)
+
+01      0         0          0         0           
+
+11      0        (13)        0        (14)
+
+10     (8)       (9)        (11)      (10)
+
+
+4             5          6             7          12        15
+x.y'.w.z + x.y'w.z' + x.y'.w'.z + x.y'.w'.z' + x'.y'.w.z + x'.y'.w'.z'
+
+Com(4,5)  = x.y'.w   => x.y'
+Com(6,7)  = x.y'.w'  =>
+
+Com(4,12) = y'.w.z
+Com(7,15) = y'.w'.z'
+
+
+Expressao = x.y' + y'.w.z + y'.w'.z'
+
+
+Questao 9:
+ 
+Parte de cima = '(x'+y').('(x.y))
+Simplificado  = (x.y).(x'+y') = 0
+
+Parte de baixo = '((z.y)+x')
+Simplificado   =  (z'+y').x
+
+Circuito completo simplificado: ((z'+y').x) + 0
+
+
+
+
+Questao 10:
+
+Parte de cima = '(x'+y'+w).'(x.y.w')
+Simplificado  =  (x.y.w').(x'+y'+w) = 0 --------> A && A' = 0
+
+
+Parte de baixo = '((y.w.z)+x')
+Simplificado   =  (y'+w'+z').x
+
+Circuito completo simplificado: ((y'+w'+z').x) + 0
