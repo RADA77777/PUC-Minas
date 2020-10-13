@@ -1,4 +1,3 @@
-# PUC-Minas-2019
-Códigos feitos em 2019, referentes aos 1 e 2 períodos.
+# PUC-Minas
 
-As devidas listas estarão juntas com os exercícios.
+Códigos feitos em 2020, referentes às matérias de Arquitetura de Computadores 1 e Algoritmos e Estruturas de Dados 3
