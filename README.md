@@ -1,6 +1,5 @@
-# PUC-Minas
-Códigos feitos em 2019/1
+# PUC Minas
+Códigos e projetos feitos durante minha graduação em Ciência da Computação. Cada branch se refere a um período.
 
-## Matérias
-
-* Algoritmos e Estruturas de Dados 2
+Meus códigos ou trechos deles podem ser usados por todos, de qualquer forma. Eu não me responsabilizo por
+possíveis acusações de plágio, sejam elas por parte da PUC-MG ou qualquer outra instituição/pessoa.
