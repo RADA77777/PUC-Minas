@@ -1,4 +1,6 @@
-# PUC-Minas-2019
-Códigos feitos em 2019, referentes aos 1 e 2 períodos.
+# PUC-Minas
+Códigos feitos em 2019/1
 
-Copie trechos e códigos inteiros como bem entender, apenas peço que tenha consideração pelo meu trabalho e me dê devido crédito.
+## Matérias
+
+* Algoritmos e Estruturas de Dados 2
