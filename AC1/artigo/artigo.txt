@@ -1,0 +1,62 @@
+Aluno: Rafael Amauri Diniz Augusto
+Matrícula: 651047
+
+3)Definições:
+
+	1. ASICs são dispositivos feitos sob medida, focados em uma única aplicação. Fazem funções específicas, e não são customizáveis.
+
+	2. ASSP é um circuito integrado que implementa uma função específica que é destinada a um mercado extenso. Ao contrário das ASICs, que combinam uma coleção de funções feitas para um cliente em específico, ASSPs estão disponíveis como componentes prontos. ASSPs são usados em vários ramos industriais, como automotivo e comunicação.
+
+	3. SPLDs são dispositivos programáveis. Os PLDs, por sua vez, são uma alternativa mais barata às ASICs, pois podem ser customizados e modificados da sua configuração padrão de fábrica.
+
+	4. CPLDs são uma junção de vários pequenos blocos, cada um com um SPLDs. Devido à dificuldade em aumentar a produtividade dos SPLDs, a solução encontrada foi ligar vários SPLDs juntos com uma camada de IO. Em essência, um SPLD gera uma saída, redireciona para uma IO, e essa IO redireciona como entrada para um outro SPLD.
+
+	5. SoC (system-on-a-chip) é um conjunto integrado de uma CPU, GPU, memória, USB controller, placas de rede, áudio e outros periféricos. Devido ao seu alto nível de integração e fiação mais curta, um SoC usa considerávelmente pouca energia em comparação a uma CPU, o que faz com que seja bem popular no uso de celulares, por ser barato, consumir pouca energia e possuir várias peças integradas. A série Snapdragon para celulares da empresa Qualcomm é um exemplo de SoCs.
+
+	6. FPGA é um conujunto de células configuráveis e, ao invés do uso do plano de portas OR ou AND, ele utiliza células configuráveis ou blocos lógicos.
+
+
+4) Diferenças
+                                                                PROM                    PLA                     PAL
+
+
+
+É programável?                                                  SIM                     SIM                     SIM
+
+
+
+Pode implementar circuitos lógicos?                             SIM                     SIM                     SIM
+
+
+
+Quais os destaques do circuito?                                 Primeiro dispositivo    Dispositivo adequado    Baixo custo de produção, alto
+                                                                a ser criado e que      para fazer soma dos     desempenho e flip-flops nas
+                                                                serviu de inspiração    produtos, além de       saídas.
+                                                                para outros             possuir múltiplas
+                                                                                        entradas tanto para as
+                                                                                        portas AND e OR.
+
+
+
+Quais os defeitos do circuito?                                  Poucos termos de        Dois níveis lógicos     Não possui um defeito mostrado nos
+                                                                produto, produzindo     configuráveis gerando   artigos base
+                                                                uma baixa eficiência    um alto custo de
+                                                                em circuitos lógicos,   fabricação e um atraso
+                                                                e demora na propagação  no tempo de resposta
+                                                                de sinais elétricos
+
+
+
+5) Diferenças
+
+1. FPGAs são um tipo de chip lógico programável. A arquitetura dos FPGAs permite que o chip tenha uma capacidade de processamento lógico muito alta. FPGAs são feitos para serem usados em aplicações mais complexas, mas por causa da sua arquitetura, pode apresentar delays imprevisíveis.
+
+2. No outro lado, como os CPLDs possuem uma arquitetura mais simples, são menos voláteis e mais previsíveis de determinar o comportamento. CPLDs são usados para aplicações lógicas simples, além de serem mais baratos e terem uma IO muito mais rápida, devido a um design mais simples. 
+
+3. Como FPGAs são RAM-based, trabalhar com eles exige a criação de funções especiais. Primeiro, é necessário programar uma "logic function" e compilar um binário. Esse binário deve ser carregado no FPGA para que, assim, ele siga as instrunções. 
+
+4. FPGAs são mais recomendados para aplicações complexas, enquanto CPLDs são mais recomendados para aplicações simples. 
+
+5. FPGAs são RAM-based, enquanto CPLDs usam um tipo de memória ROM chamada EEPROM (electrically erasable programmable read-only memory) 
+
+6. Normalmente, FPGAs são mais caros que CPLDs
