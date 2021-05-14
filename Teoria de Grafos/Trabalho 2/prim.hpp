@@ -34,7 +34,7 @@ int Prim::mst_add_lowest_edge(Graph *g, Graph *mst)
 
     for(auto i : this->priority_queue)
         for(auto j : i.second)
-            for(auto k: j)
+            for(auto k : j)
             {
                 // Skip already visited vertexes
                 if(g->visited_vertexes[k.first] == 2)

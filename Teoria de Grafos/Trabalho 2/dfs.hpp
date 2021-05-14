@@ -22,17 +22,11 @@ void _dfs_count_cycles(Graph *g, int current_vertex, int parent_vertex)
         for(auto j : i)
         {
             if(j.first != parent_vertex && g->visited_vertexes[j.first] == 1 && g->visited_vertexes[current_vertex] == 1)
+                g->num_cycles++;
+            
+            else if (j.first != parent_vertex)
             {
-                if(g->visited_vertexes[j.first] == 1)
-                {
-                    g->num_cycles++;
-                }
-                else if (j.first != parent_vertex)
-                {
-                    std::cout << "Saindo de " << current_vertex << " e indo pra " << j.first << "\n";
-                    _dfs_count_cycles(g, j.first, current_vertex);
-                    std::cout << "Voltei pro vértice " << current_vertex << "\n";
-                }
+                _dfs_count_cycles(g, j.first, current_vertex);
             }
         }
     }
