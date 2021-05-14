@@ -1,3 +1,5 @@
+// Rafael Amauri Diniz Augusto --- 651047
+
 #include <iostream>
 
 #include "graph.hpp"
@@ -21,12 +23,14 @@ void _dfs_count_cycles(Graph *g, int current_vertex, int parent_vertex)
     for(auto i : g->adjacent_vertexes[current_vertex]){
         for(auto j : i)
         {
-            if(j.first != parent_vertex && g->visited_vertexes[j.first] == 1 && g->visited_vertexes[current_vertex] == 1)
-                g->num_cycles++;
-            
-            else if (j.first != parent_vertex)
+            if(j.first != parent_vertex)
             {
-                _dfs_count_cycles(g, j.first, current_vertex);
+                if(g->visited_vertexes[j.first] == 1)
+                    g->num_cycles++;
+            
+                else
+                    _dfs_count_cycles(g, j.first, current_vertex);
+                
             }
         }
     }
@@ -39,7 +43,7 @@ void _dfs_count_cycles(Graph *g, int current_vertex, int parent_vertex)
 
 void dfs_count_cycles(Graph *g, int root)
 {
-    _dfs_count_cycles(g, 1, -1);
+    _dfs_count_cycles(g, root, -1);
 }
 
 #endif

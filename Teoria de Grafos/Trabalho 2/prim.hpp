@@ -4,6 +4,7 @@
 
 #ifndef PRIM_HPP
 #define PRIM_HPP
+#define LOGGING 0
 
 #include <limits>
 #include "graph.hpp"
@@ -32,6 +33,22 @@ int Prim::mst_add_lowest_edge(Graph *g, Graph *mst)
     int lowest_edge_v2;
     int lowest_edge_value = std::numeric_limits<int>::max();
 
+    if(LOGGING == 1)
+    {
+        std::cout << "COMECANDO A PQ\n";
+        for(auto i : this->priority_queue)
+        {
+            for(auto j : i.second)
+            {
+                for(auto k : j)
+                {
+                    std::cout << i.first << " liga com " << k.first << " com peso " << k.second << "\n";
+                }
+            }
+        }
+        std::cout << "TERMINANDO A PQ\n";
+    }
+
     for(auto i : this->priority_queue)
         for(auto j : i.second)
             for(auto k : j)
@@ -39,11 +56,15 @@ int Prim::mst_add_lowest_edge(Graph *g, Graph *mst)
                 // Skip already visited vertexes
                 if(g->visited_vertexes[k.first] == 2)
                 {
+                    if(LOGGING == 1)
+                        std::cout << "pulei o " << k.first << "\n";
                     continue;
                 }
                 // finding lowest value of all edges in the PQ
                 if(k.second < lowest_edge_value)
                 {
+                    if(LOGGING == 1)
+                        std::cout << k.second << " eh menor que " << lowest_edge_value << "\n";
                     lowest_edge_v1    =  i.first;
                     lowest_edge_v2    =  k.first;
                     lowest_edge_value =  k.second;
@@ -53,6 +74,9 @@ int Prim::mst_add_lowest_edge(Graph *g, Graph *mst)
     // Adds the selected edge to the MST
     mst->add_edge(lowest_edge_v1, lowest_edge_v2, lowest_edge_value);
 
+    
+    if(LOGGING == 1)
+        std::cout << "deletando " << lowest_edge_v1 << " - " << lowest_edge_v2 << "\n\n";
     // Removing added edge from PQ
     for(int i = 0; i < this->priority_queue.find(lowest_edge_v1)->second.size(); i++)
         if(this->priority_queue.find(lowest_edge_v1)->second.at(i).find(lowest_edge_v2)->first == lowest_edge_v2)
