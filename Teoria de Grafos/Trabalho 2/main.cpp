@@ -11,7 +11,6 @@
 int main(void)
 {
     Graph *g = new Graph();
-    Graph *mst = new Graph();
     Prim *p = new Prim();
 
 
@@ -29,7 +28,7 @@ int main(void)
 */
 
 
-/*
+
     g->add_edge(1,2,19);
     g->add_edge(1,3,11);
     g->add_edge(2,4,7);
@@ -39,7 +38,7 @@ int main(void)
     g->add_edge(5,2,6);
     g->add_edge(6,5,5);
     g->add_edge(6,2,3);
-*/
+
 
 /*
     g->add_edge(0,2,7);
@@ -50,12 +49,12 @@ int main(void)
 */
 
 
-    p->prim_generate_mst(g, mst, 3);
-    std::cout << "Existem " << g->num_cycles << " ciclos\n";
+    p->prim_generate_mst(g, 3);
+    std::cout << "Prim: existem " << g->num_cycles << " ciclos\n";
 
     g->clear_visited_vertexes();
 
     dfs_count_cycles(g, 3);
-    std::cout << "Existem " << g->num_cycles << " ciclos\n";
+    std::cout << "DFS: existem " << g->num_cycles << " ciclos\n";
 
 }

@@ -21,7 +21,7 @@ class Prim
         int mst_add_lowest_edge(Graph *g, Graph *mst);
 
     public:
-        void prim_generate_mst(Graph *g, Graph *mst, int current_vertex);
+        void prim_generate_mst(Graph *g, int current_vertex);
 };
 
 
@@ -104,8 +104,9 @@ void Prim::_prim_generate_mst(Graph *g, Graph *mst, int current_vertex)
 
 
 // Public function
-void Prim::prim_generate_mst(Graph *g, Graph *mst, int current_vertex)
+void Prim::prim_generate_mst(Graph *g, int current_vertex)
 {
+    Graph *mst = new Graph();
     this->_prim_generate_mst(g, mst, current_vertex);
     
     g->num_cycles = g->num_edges - mst->num_edges;
