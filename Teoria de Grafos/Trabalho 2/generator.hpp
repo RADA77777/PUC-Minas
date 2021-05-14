@@ -3,14 +3,11 @@
 #ifndef GENERATOR_HPP
 #define GENERATOR_HPP
 
-#define LOGGING 1
-
 #include <stdlib.h>
-#include <iostream>
 
-#include "graph.hpp";
+#include "graph.hpp"
 
-void graph_generator(Graph *g, int num_edges)
+void graph_generator(Graph *g, int num_edges, int range)
 {
     srand(time(NULL));
     int vertex1, vertex2, edge_weight, aux;
@@ -27,7 +24,7 @@ void graph_generator(Graph *g, int num_edges)
             if(LOGGING == 1)
                 std::cout << "Resorteando...\n" ;
             
-            vertex2 = rand()%200;
+            vertex2 = rand()%range;
 
             for(auto i : combinations)
                 for(auto j : i)
@@ -40,7 +37,7 @@ void graph_generator(Graph *g, int num_edges)
         }while(repeated);
 
         aux = vertex1;
-        edge_weight = rand()%15;
+        edge_weight = rand()%range;
 
         g->add_edge(vertex1, vertex2, edge_weight);
         

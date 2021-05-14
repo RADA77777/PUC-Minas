@@ -1,5 +1,7 @@
 // Rafael Amauri Diniz Augusto --- 651047
 
+#define LOGGING 1
+
 #include <chrono>
 
 #include "graph.hpp"
@@ -8,15 +10,19 @@
 #include "generator.hpp"
 
 
-// Number of edges to be used in the generator
-#define NUM_EDGES 100
+// Number of edges to be drawn by the generator
+#define NUM_EDGES 10000
+
+// The max value that can be drawn by the generator 
+#define MAX_RANGE 300
+
 
 int main(void)
 {
     Graph *g = new Graph();
     Prim *p = new Prim();
 
-    graph_generator(g, NUM_EDGES);
+    graph_generator(g, NUM_EDGES, MAX_RANGE);
 
 // Some sample graphs
 /*

@@ -4,9 +4,9 @@
 
 #ifndef PRIM_HPP
 #define PRIM_HPP
-#define LOGGING 0
 
 #include <limits>
+
 #include "graph.hpp"
 
 
