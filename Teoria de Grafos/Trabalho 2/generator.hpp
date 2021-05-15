@@ -21,7 +21,7 @@ void graph_generator(Graph *g, int num_edges, int range)
         {
             repeated = false;
 
-            if(LOGGING == 1)
+            if(LOGGING_GENERATOR == 1)
                 std::cout << "Resorteando...\n" ;
             
             vertex2 = rand()%range;
@@ -43,7 +43,7 @@ void graph_generator(Graph *g, int num_edges, int range)
         
         combinations.push_back({{vertex1, vertex2}});
 
-        if(LOGGING == 1)
+        if(LOGGING_GENERATOR == 1)
             std::cout << "Inserido: " << vertex1 << " - " << vertex2 << " - " << edge_weight << "\n";
         vertex1 = vertex2;
     }
