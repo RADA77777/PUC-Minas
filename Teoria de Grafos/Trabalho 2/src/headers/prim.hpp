@@ -1,7 +1,5 @@
 // Rafael Amauri Diniz Augusto --- 651047
 
-// Collection of functions to be used in Prim's algorithm
-
 #ifndef PRIM_HPP
 #define PRIM_HPP
 
