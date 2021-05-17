@@ -126,18 +126,20 @@ Grafo 3:
 
 \begin{figure}[ht]
     \centering
-    \includegraphics[scale=0.2]{grafo3.jpg}
+    \includegraphics[scale=0.6]{grafo3.png}
 \end{figure}
 
+\newpage
 
 Grafo 4:
 
 
 \begin{figure}[ht]
     \centering
-    \includegraphics[scale=0.2]{grafo4.jpg}
+    \includegraphics[scale=0.6]{grafo4.png}
 \end{figure}
 
+\newpage
 
 \section*{Hardware}
 Os testes a seguir foram efetuados em um computador com a seguinte configuração:
@@ -157,6 +159,24 @@ Versão do GCC/G++: 11.1.0-1
 
 \section*{Testes}
 
+
+\begin{table}
+    \begin{tabular}{lll}
+    ~                           & Algoritmo de Prim          & DFS                      \\ \hline
+    Complexidade                & O(V$^2$)                   & O(V + E)                 \\
+    Tempo de execução - Grafo 1 & 4.15 x $10^{-5}$ segundos  & 8.87 x $10^{-6}$ segundos\\
+    Tempo de execução - Grafo 2 & 3.29 x $10^{-5}$ segundos  & 6.56 x $10^{-6}$ segundos\\
+    Tempo de execução - Grafo 3 & 1.92 x $10^{-3}$ segundos  & 1.82 x $10^{-5}$ segundos\\
+    Tempo de execução - Grafo 4 & 5.12 x $10^{-3}$ segundos  & 7.27 x $10^{-5}$ segundos\\ 
+    \end{tabular}
+\end{table}
+
+
+\section{Conclusões}
+Como podemos ver na tabela, o Algoritmo de Prim sempre tem um tempo de execução pior que o DFS, e isso
+se dá por sua complexidade ser O($V^2$), enquanto a complexidade do algoritmo DFS é O(V + E).
+É notado que ambos algoritmos podem ser usados para detecção de ciclos em grafos conexos não direcionados, mas, quando performance
+é levada em conta, o DFS sempre será uma alternativa melhor que o Algoritmo de Prim.
 
 
 \end{document}
