@@ -28,10 +28,10 @@ int main(void)
     Graph *g = new Graph();
 
 // Generates a neat graph with <NUM_EDGES> edges and <MAX_RANGE> as a theoretical max number of vertexes
-    graph_generator(g, NUM_EDGES, MAX_RANGE);
+    //graph_generator(g, NUM_EDGES, MAX_RANGE);
 
 // Some sample graphs
-/*
+
     g->add_edge(0,1,2);
     g->add_edge(0,3,3);
     g->add_edge(4,0,0);
@@ -40,7 +40,7 @@ int main(void)
     g->add_edge(3,4,1);
     g->add_edge(1,2,1);
     g->add_edge(3,2,1);
-*/
+
 /*
     g->add_edge(0,1,1);
     g->add_edge(1,2,2);
@@ -49,18 +49,17 @@ int main(void)
     g->add_edge(0,2,0);
     g->add_edge(4,1,10);
     g->add_edge(2,4,1);
-    g->add_edge(3,4,0);
 */
 /*
-    g->add_edge(1,2,19);
-    g->add_edge(1,3,11);
-    g->add_edge(2,4,7);
-    g->add_edge(1,4,3);
-    g->add_edge(3,4,3);
-    g->add_edge(3,2,0);
-    g->add_edge(5,2,6);
-    g->add_edge(6,5,5);
-    g->add_edge(6,2,3);
+    g->add_edge(0,1,19);
+    g->add_edge(0,2,11);
+    g->add_edge(1,3,7);
+    g->add_edge(0,3,3);
+    g->add_edge(2,3,3);
+    g->add_edge(2,1,0);
+    g->add_edge(4,1,6);
+    g->add_edge(5,4,5);
+    g->add_edge(1,5,3);
 */
 /*
     g->add_edge(0,2,7);
@@ -68,12 +67,6 @@ int main(void)
     g->add_edge(2,3,4);
     g->add_edge(2,4,6);
     g->add_edge(3,4,8);
-*/
-/*
-    g->add_edge(0,1,7);
-    g->add_edge(0,2,0);
-    g->add_edge(1,2,2);
-    g->add_edge(2,3,1);
 */
 
     using clock = std::chrono::system_clock;
