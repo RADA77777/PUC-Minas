@@ -1,0 +1,92 @@
+\documentclass[12pt]{article}
+\usepackage{sbc-template}
+\usepackage[utf8]{inputenc}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{textcomp}
+\setlength{\parindent}{0em}
+
+
+\lstdefinestyle{style1}{
+    basicstyle=\ttfamily,
+    columns=fullflexible,
+    keepspaces=true,
+    upquote=true,
+}
+\lstdefinestyle{style2}{
+    showstringspaces=false,
+    commentstyle=\color{olive},
+    keywordstyle=\color{blue},
+    identifierstyle=\color{violet},
+    stringstyle=\color{purple},
+}
+\lstdefinestyle{style3}{
+    language=c,
+    directivestyle=\color{teal},
+}
+\lstdefinestyle{combined}{
+    style=style1,
+    style=style2,
+    style=style3,
+}
+\lstnewenvironment{code}{
+    \lstset{
+        style=combined,
+    }
+}{}
+
+
+\title{Comparando DFS e Algoritmo de Prim para detecção de ciclos em grafos não-direcionados}
+\author{Rafael Amauri Diniz Augusto}
+\address{PUC-MG}
+
+\begin{document}
+
+\maketitle
+
+\tableofcontents
+\newpage
+
+\section{Introdução}
+O algoritmo de Prim e o DFS são algoritmos que têm várias aplicações na área de estudos de grafos. 
+Uma dessas aplicações é o seu uso para detecção de ciclos em grafos não-direcionados conexos, o
+que vai ser melhor explorado nesse artigo e como esses algoritmos podem ser alterados para
+contar o número de ciclos em um grafo simples conexo não direcionado.\vspace{10pt}
+
+
+\section{Explicando a classe Graph}
+
+
+Nota: Todos os arquivos de código-fonte contém comentários e documentação extensiva. Favor
+consultá-los para mais informações sobre o funcionamento do código.\vspace{10pt}
+
+
+O trabalho da classe Graph é armazenar todas as informações sobre um determinado grafo, como 
+a quais vértices um determinado vértice se conecta, qual o peso das arestas, o número de arestas
+e o número de ciclos no grafo.\vspace{10pt}
+
+
+\section{Explicando o Algoritmo de Prim}
+O algoritmo de Prim é um algoritmo guloso de complexidade O(V²) - com V sendo o número de 
+vértices - que tem como objetivo encontrar uma Árvore Geradora Mínima(AGM) para um determinado 
+grafo. O seu funcionamento é escolhendo qual aresta dos vértices já visitados tem o menor valor, 
+e em seguida adicionando ela a um novo grafo: a Árvore Geradora Mínima.
+
+Para ser usado na contagem de ciclos de um determinado grafo, o funcionamento é bem simples: como
+uma AGM é um grafo conexo sem ciclos, basta substrair o número de arestas da AGM do número de
+arestas do grafo padrão. Esse valor será o número de ciclos no grafo.\vspace{10pt}
+
+
+\section{Explicando o Algoritmo DFS}
+O DFS é um algoritmo de travessia de grafos de complexidade O(V + E) - com V sendo o número de 
+vértices e E sendo o número de arestas - se que originalmente começa a partir de um nó raiz e 
+explora o grafo até onde for possível por meio de recursão.
+
+Para ser usado na contagem de ciclos de um grafo, o DFS percorre o grafo marcando os vértices 
+já visitados. Quando em um vértice V existe uma conexão para outro vértice já parcialmente
+visitado, é porque existe um ciclo. Ao acumular quantas dessas conexões existem no grafo,
+é encontrado o número de ciclos.\vspace{10pt}
+
+\section{Comparação dos algoritmos e análise}
+
+\end{document}

@@ -10,17 +10,17 @@
 #define LOGGING_GENERATOR 0
 
 // Number of edges to be drawn by the generator
-#define NUM_EDGES 500
+#define NUM_EDGES 50
 
 // The max value that can be drawn by the generator 
-#define MAX_RANGE 200
+#define MAX_RANGE 20
 
 #include <chrono>
 
-#include "graph.hpp"
-#include "prim.hpp"
-#include "dfs.hpp"
-#include "generator.hpp"
+#include "headers/graph.hpp"
+#include "headers/prim.hpp"
+#include "headers/dfs.hpp"
+#include "headers/generator.hpp"
 
 
 int main(void)
