@@ -4,6 +4,7 @@
 \usepackage{listings}
 \usepackage{xcolor}
 \usepackage{textcomp}
+\usepackage{graphicx}
 \setlength{\parindent}{0em}
 
 
@@ -53,8 +54,10 @@ Uma dessas aplicações é o seu uso para detecção de ciclos em grafos não-di
 que vai ser melhor explorado nesse artigo e como esses algoritmos podem ser alterados para
 contar o número de ciclos em um grafo simples conexo não direcionado.\vspace{10pt}
 
+\section{Explicando os componentes do programa}
 
-\section{Explicando a classe Graph}
+
+\section*{Explicando a classe Graph}
 
 
 Nota: Todos os arquivos de código-fonte contém comentários e documentação extensiva. Favor
@@ -66,18 +69,19 @@ a quais vértices um determinado vértice se conecta, qual o peso das arestas, o
 e o número de ciclos no grafo.\vspace{10pt}
 
 
-\section{Explicando o Algoritmo de Prim}
-O algoritmo de Prim é um algoritmo guloso de complexidade O(V²) - com V sendo o número de 
-vértices - que tem como objetivo encontrar uma Árvore Geradora Mínima(AGM) para um determinado 
-grafo. O seu funcionamento é escolhendo qual aresta dos vértices já visitados tem o menor valor, 
-e em seguida adicionando ela a um novo grafo: a Árvore Geradora Mínima.
+\section*{Explicando o Algoritmo de Prim}
+O algoritmo de Prim é um algoritmo guloso de complexidade O($V^2$) - com V sendo o 
+número de vértices - que tem como objetivo encontrar uma Árvore Geradora Mínima(AGM)
+para um determinado grafo. O seu funcionamento é escolhendo qual aresta dos vértices
+já visitados tem o menor valor, e em seguida adicionando ela a um novo grafo: a 
+Árvore Geradora Mínima.
 
 Para ser usado na contagem de ciclos de um determinado grafo, o funcionamento é bem simples: como
 uma AGM é um grafo conexo sem ciclos, basta substrair o número de arestas da AGM do número de
 arestas do grafo padrão. Esse valor será o número de ciclos no grafo.\vspace{10pt}
 
 
-\section{Explicando o Algoritmo DFS}
+\section*{Explicando o Algoritmo DFS}
 O DFS é um algoritmo de travessia de grafos de complexidade O(V + E) - com V sendo o número de 
 vértices e E sendo o número de arestas - se que originalmente começa a partir de um nó raiz e 
 explora o grafo até onde for possível por meio de recursão.
@@ -88,5 +92,71 @@ visitado, é porque existe um ciclo. Ao acumular quantas dessas conexões existe
 é encontrado o número de ciclos.\vspace{10pt}
 
 \section{Comparação dos algoritmos e análise}
+Para a comparação dos algoritmos DFS e Prim, serão usados 4 grafos conexos não-direcionados.
+O tempo de execução de cada um desses algortimos será medido e comparado. A hipótese é que,
+por conta da complexidade do Algoritmo de Prim ser menos eficiente que a do DFS, o algoritmo
+de Prim será mais lento para achar o número de ciclos nos 4 grafos.\vspace{20pt}
+
+
+\section*{Grafos}
+
+
+Grafo 1:
+
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[scale=0.2]{grafo1.jpg}
+  \end{figure}
+
+
+Grafo 2:
+
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[scale=0.2]{grafo2.jpg}
+\end{figure}
+
+\newpage
+
+
+Grafo 3:
+
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[scale=0.2]{grafo3.jpg}
+\end{figure}
+
+
+Grafo 4:
+
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[scale=0.2]{grafo4.jpg}
+\end{figure}
+
+
+\section*{Hardware}
+Os testes a seguir foram efetuados em um computador com a seguinte configuração:
+
+
+Sistema Operacional: Linux
+
+
+Versão da kernel: 5.12.4-arch1-2
+
+
+CPU: AMD Ryzen 5 5600X - 6 cores / 12 threads @ 4.6Ghz
+
+
+Versão do GCC/G++: 11.1.0-1
+
+
+\section*{Testes}
+
+
 
 \end{document}
