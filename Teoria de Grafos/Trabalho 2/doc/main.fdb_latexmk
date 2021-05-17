@@ -1,7 +1,7 @@
 # Fdb version 3
-["pdflatex"] 1621284166 "/home/rafael/PUC/Grafos/trabalho2/doc/main.tex" "/home/rafael/PUC/Grafos/trabalho2/doc/main.pdf" "main" 1621284167
-  "/home/rafael/PUC/Grafos/trabalho2/doc/main.aux" 1621284167 482 0d0b53eb6399ef016ce3746067e4c0d0 ""
-  "/home/rafael/PUC/Grafos/trabalho2/doc/main.tex" 1621284166 5457 d4ff5fb36954f7ca73fc8ec7d2b5a5f6 ""
+["pdflatex"] 1621284946 "/home/rafael/PUC/Grafos/trabalho2/doc/main.tex" "/home/rafael/PUC/Grafos/trabalho2/doc/main.pdf" "main" 1621284947
+  "/home/rafael/PUC/Grafos/trabalho2/doc/main.aux" 1621284946 482 0d0b53eb6399ef016ce3746067e4c0d0 ""
+  "/home/rafael/PUC/Grafos/trabalho2/doc/main.tex" 1621284945 5529 ced000b915e6b3654af718e474a35f25 ""
   "/usr/share/texmf-dist/fonts/enc/dvips/base/8r.enc" 1616952564 4850 80dc9bab7f31fb78a000ccfed0e27cab ""
   "/usr/share/texmf-dist/fonts/map/fontname/texfonts.map" 1616952564 3524 cb3e574dea2d1052e39280babc910dc8 ""
   "/usr/share/texmf-dist/fonts/tfm/adobe/times/ptmb7t.tfm" 1616952564 2172 fd0c924230362ff848a33632ed45dc23 ""
@@ -60,14 +60,14 @@
   "grafo2.jpg" 1621217802 69964 e6b514b9f372bff195a58cea8a559f8a ""
   "grafo3.png" 1621282351 60476 a554726f9d96c525107882ebda08aec4 ""
   "grafo4.png" 1621280301 77481 f7126a3546e5bddf6ffbd158f1d55db5 ""
-  "main.aux" 1621284167 482 0d0b53eb6399ef016ce3746067e4c0d0 "pdflatex"
-  "main.tex" 1621284166 5457 d4ff5fb36954f7ca73fc8ec7d2b5a5f6 ""
-  "main.toc" 1621284167 286 5fa180d51227d0ceac6b66d279300f68 "pdflatex"
+  "main.aux" 1621284946 482 0d0b53eb6399ef016ce3746067e4c0d0 "pdflatex"
+  "main.tex" 1621284945 5529 ced000b915e6b3654af718e474a35f25 ""
+  "main.toc" 1621284946 286 5fa180d51227d0ceac6b66d279300f68 "pdflatex"
   "sbc-template.sty" 1621179378 6671 eaa7bd765719e38edcad8c1edf7a2595 ""
   (generated)
-  "/home/rafael/PUC/Grafos/trabalho2/doc/main.pdf"
-  "main.log"
-  "/home/rafael/PUC/Grafos/trabalho2/doc/main.log"
   "main.toc"
   "main.aux"
+  "main.log"
   "main.pdf"
+  "/home/rafael/PUC/Grafos/trabalho2/doc/main.log"
+  "/home/rafael/PUC/Grafos/trabalho2/doc/main.pdf"
