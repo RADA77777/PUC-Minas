@@ -4,7 +4,6 @@
 #define GRAPH_HPP
 
 #include <iostream>
-#include <vector>
 #include <map>
 
 
@@ -17,7 +16,7 @@ class Graph
         
         // This data structure is used to store all edges and their values connected to a given vertex 
         // vertex 1 // connected_vertex // weight
-        std::map<int, std::vector<std::map<int, int>>> adjacent_vertexes;
+        std::map<int, std::map<int, int>> adjacent_vertexes;
         
         // number of edges in the graph
         short num_edges = 0;
@@ -37,10 +36,10 @@ void Graph::add_edge(int vertex1, int vertex2, int weight)
     std::map<int, int> temp;
     
     temp = {{vertex2, weight}}; 
-    this->adjacent_vertexes[vertex1].push_back(temp);
+    this->adjacent_vertexes[vertex1][vertex2] = weight;
 
     temp = {{vertex1, weight}};
-    this->adjacent_vertexes[vertex2].push_back(temp);
+    this->adjacent_vertexes[vertex2][vertex1] = weight;
 
     num_edges++;
 }

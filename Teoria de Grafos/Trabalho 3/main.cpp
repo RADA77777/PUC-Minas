@@ -10,9 +10,9 @@ int main()
     g->add_edge(3,0,4);
     g->add_edge(0,2,0);
     g->add_edge(4,1,10);
-    g->add_edge(2,4,1);
+    g->add_edge(2,10,1);
 
-    dfs_find(g, 0, 13);
+    dfs_find(g, 0, 3);
 
     return 0;
 }

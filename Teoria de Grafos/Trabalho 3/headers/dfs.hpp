@@ -13,26 +13,26 @@ bool _dfs_find(Graph *g, int current_vertex, int parent_vertex, int value)
 {
     bool is_found = false;
 
-    if(current_vertex == value)
-        is_found = true;
-
     // Percorrer o grafo com o DFS e encontar o vértice <value>
-    else
-    {
-        g->visited_vertexes[current_vertex] = 2;
+    g->visited_vertexes[current_vertex] = 2;
         
-        for(auto i : g->adjacent_vertexes[current_vertex])
-            for(auto j : i)
-            {        
-                if(j.first == parent_vertex || g->visited_vertexes[j.first] == 2)
-                    continue;
+    for(auto i : g->adjacent_vertexes[current_vertex])
+        if(i.first == value)
+            is_found = true;
 
-                if(LOGGING_DFS == 1)
-                    std::cout << "Caminhando do vertice " << current_vertex << " para o vertice " << j.first << "\n";
-                    
-                is_found = _dfs_find(g, j.first, current_vertex, value);
-            }
-    }
+
+    if(!is_found)
+        for(auto i = g->adjacent_vertexes[current_vertex].begin(); !is_found && i != g->adjacent_vertexes[current_vertex].end(); i++)
+        {
+            if(i->first == parent_vertex || g->visited_vertexes[i->first] == 2)
+                continue;
+            
+            if(LOGGING_DFS == 1)
+                std::cout << "Caminhando do vertice " << current_vertex << " para o vertice " << i->first << "\n";
+
+            is_found = _dfs_find(g, i->first, current_vertex, value);
+        }
+        
 
     return is_found;
 }
