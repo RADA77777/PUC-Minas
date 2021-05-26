@@ -1,4 +1,0 @@
-\contentsline {section}{\numberline {1}Introdução}{2}{}%
-\contentsline {section}{\numberline {2}Explicando os componentes do programa}{2}{}%
-\contentsline {section}{\numberline {3}Comparação dos algoritmos e análise}{2}{}%
-\contentsline {section}{\numberline {4}Conclusões}{6}{}%
