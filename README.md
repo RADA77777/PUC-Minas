@@ -1,4 +1,7 @@
-# PUC-Minas-2019
-Códigos feitos em 2019, referentes aos 1 e 2 períodos.
+# PUC Minas
 
-Copie trechos e códigos inteiros como bem entender, apenas peço que tenha consideração pelo meu trabalho e me dê devido crédito.
+Códigos e projetos feitos durante minha graduação em Ciência da Computação. Cada branch se refere a um período.
+
+Meus códigos inteiros ou trechos deles podem ser usados por todos, sem restrições. Tenha em mente que eu não me responsabilizo por possíveis acusações de plágio, sejam elas por parte da PUC-MG ou qualquer outra instituição/pessoa.
+
+O uso dos códigos aqui são por conta e risco do usuário.
